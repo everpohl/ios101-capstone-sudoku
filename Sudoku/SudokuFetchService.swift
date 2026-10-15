@@ -13,7 +13,7 @@ class SudokuFetchService {
         case medium = "medium"
         case hard = "hard"
     }
-    static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: ((SudokuAPIResponse) -> Void)? = nil) {
+    static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: ((Sudoku) -> Void)? = nil) {
         let apiKey = "***REMOVED***"
         let parameters = "difficulty=\(difficulty)&width=\(width)&height=\(height)"
         let url = URL(string: "https://api.api-ninjas.com/v1/sudokugenerate?\(parameters)")!
@@ -35,9 +35,9 @@ class SudokuFetchService {
                 assertionFailure("Invalid response status code: \(httpResponse.statusCode)")
                 return
             }
-            let response = try! JSONDecoder().decode(SudokuAPIResponse.self, from: data)
+            let response = try! JSONDecoder().decode(Sudoku.self, from: data)
             DispatchQueue.main.async {
-                completion?(response.sudokuBoard) //call the completion colosure and pass in the forecast data model
+                completion?(response) //call the completion colosure and pass in the forecast data model
             }
         }
         task.resume()
