@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // Fallback values only; these never overwrite a value the user has saved
+        UserDefaults.standard.register(defaults: ["themeIndex": 0])
         return true
     }
 

@@ -1,24 +1,330 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="W9w-Sz-rPz">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25073"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Home-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="g4n-pW-VM8"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
+        </scene>
+        <!--Game-->
+        <scene sceneID="DPW-86-zei">
+            <objects>
+                <viewController id="DQr-Ni-Hzc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Xh-TQ-XXN">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="6pf-Az-2Co"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Game" image="gamecontroller.fill" catalog="system" id="A5k-VC-Gni"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y2G-o0-fUs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1121" y="1492"/>
+        </scene>
+        <!--High Scores-->
+        <scene sceneID="JGU-zH-cyY">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1p6-iG-nzG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tableViewController id="gpL-fZ-jJz" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="s4u-7D-nL9">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="hN9-Qa-8ll">
+                                <rect key="frame" x="0.0" y="50" width="393" height="51"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hN9-Qa-8ll" id="FMI-IW-mPg">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gpL-fZ-jJz" id="aLO-fu-Kac"/>
+                            <outlet property="delegate" destination="gpL-fZ-jJz" id="2kv-f2-J6T"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="High Scores" image="list.number" catalog="system" id="coG-VU-dCH"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="410" y="1492"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="L5v-tb-B89">
+            <objects>
+                <tableViewController title="Settings" id="KIr-pL-h7Y" customClass="SettingsViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="UOe-lb-laq">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Section-1" id="JcZ-Wa-8Z8">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Q81-7V-RFI">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="51"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Q81-7V-RFI" id="Gok-rM-Ab5">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Theme:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lk-fg-AnX">
+                                                    <rect key="frame" x="20" y="9.9999999999999982" width="84.666666666666671" height="31.333333333333329"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="ThQ-rh-gOc">
+                                                    <rect key="frame" x="146" y="13.666666666666664" width="227" height="24"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="puJ-Gj-dd7">
+                                                            <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be blue" label="blue theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="24" id="K82-VJ-TwF"/>
+                                                                <constraint firstAttribute="width" constant="24" id="mRH-oQ-dr2"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="ljT-zc-9h8"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tb0-yf-fcU">
+                                                            <rect key="frame" x="29" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be purple" label="purple theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="Mc7-vK-Trt"/>
+                                                                <constraint firstAttribute="height" constant="24" id="fGm-5t-QhS"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="80T-pO-EXK"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecv-cf-XtH">
+                                                            <rect key="frame" x="58" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemPinkColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be pink" label="pink theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="2jE-id-g6A"/>
+                                                                <constraint firstAttribute="height" constant="24" id="TrQ-62-d7Z"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="4gW-la-gdC"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8An-DC-CrA">
+                                                            <rect key="frame" x="87" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemRedColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be red" label="red theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="8cY-c9-9VA"/>
+                                                                <constraint firstAttribute="height" constant="24" id="Ahh-2I-rC9"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="F6h-SL-xDJ"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mCy-Mt-kGa">
+                                                            <rect key="frame" x="116" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be orange" label="orange theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="5h4-5g-yUK"/>
+                                                                <constraint firstAttribute="height" constant="24" id="uom-nW-gNj"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="2x2-ba-ZW4"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Peb-wg-UPh">
+                                                            <rect key="frame" x="145" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be yellow" label="yellow theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="24" id="Fyp-Bd-H5T"/>
+                                                                <constraint firstAttribute="height" constant="24" id="a5E-mT-s63"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="ixf-EV-zKd"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pt6-MV-vLo">
+                                                            <rect key="frame" x="174" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be green" label="green theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="24" id="cbm-Ip-hwR"/>
+                                                                <constraint firstAttribute="width" constant="24" id="n0b-hS-dYa"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="lQx-e2-0gl"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aaa-UK-NTA">
+                                                            <rect key="frame" x="203" y="0.0" width="24" height="24"/>
+                                                            <color key="backgroundColor" systemColor="systemGrayColor"/>
+                                                            <accessibility key="accessibilityConfiguration" hint="changes the app's color theme to be gray" label="gray theme"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="24" id="Dfv-z5-R7o"/>
+                                                                <constraint firstAttribute="width" constant="24" id="TGj-1l-kdS"/>
+                                                            </constraints>
+                                                            <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                            <state key="selected">
+                                                                <imageReference key="image" image="checkmark" catalog="system" symbolScale="small"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="themeButtonTapped:" destination="KIr-pL-h7Y" eventType="touchUpInside" id="XiP-3K-NwR"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="24" id="GQa-Qa-nkN"/>
+                                                    </constraints>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="4lk-fg-AnX" firstAttribute="leading" secondItem="Gok-rM-Ab5" secondAttribute="leadingMargin" id="2iK-4J-zVW"/>
+                                                <constraint firstItem="ThQ-rh-gOc" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4lk-fg-AnX" secondAttribute="trailing" constant="40" id="PqZ-mW-7v0"/>
+                                                <constraint firstItem="ThQ-rh-gOc" firstAttribute="trailing" secondItem="Gok-rM-Ab5" secondAttribute="trailingMargin" id="WkV-pp-YQN"/>
+                                                <constraint firstItem="4lk-fg-AnX" firstAttribute="centerY" secondItem="Gok-rM-Ab5" secondAttribute="centerY" id="X17-aq-Skk"/>
+                                                <constraint firstItem="ThQ-rh-gOc" firstAttribute="centerY" secondItem="Gok-rM-Ab5" secondAttribute="centerY" id="unk-Gj-U6H"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="KIr-pL-h7Y" id="Rvd-ai-xUb"/>
+                            <outlet property="delegate" destination="KIr-pL-h7Y" id="zxV-mN-968"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Settings" image="gear" catalog="system" id="BVH-G6-xzH"/>
+                    <connections>
+                        <outletCollection property="themeButtons" destination="puJ-Gj-dd7" collectionClass="NSMutableArray" id="ljz-zx-Pbf"/>
+                        <outletCollection property="themeButtons" destination="Tb0-yf-fcU" collectionClass="NSMutableArray" id="XOd-8Z-cnl"/>
+                        <outletCollection property="themeButtons" destination="Ecv-cf-XtH" collectionClass="NSMutableArray" id="heK-zb-iey"/>
+                        <outletCollection property="themeButtons" destination="8An-DC-CrA" collectionClass="NSMutableArray" id="AGu-Bx-38x"/>
+                        <outletCollection property="themeButtons" destination="mCy-Mt-kGa" collectionClass="NSMutableArray" id="sBM-lq-QP0"/>
+                        <outletCollection property="themeButtons" destination="Pt6-MV-vLo" collectionClass="NSMutableArray" id="HOS-Uh-aSa"/>
+                        <outletCollection property="themeButtons" destination="Aaa-UK-NTA" collectionClass="NSMutableArray" id="hcz-tb-b5n"/>
+                        <outletCollection property="themeButtons" destination="Peb-wg-UPh" collectionClass="NSMutableArray" id="Gb4-Qi-0W5"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ggd-k8-mBX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-421" y="1492"/>
+        </scene>
+        <!--Tab Bar View Controller-->
+        <scene sceneID="3p9-8h-76u">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="W9w-Sz-rPz" customClass="tabBarViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NmR-29-rVZ">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="UgS-Tc-UvK"/>
+                        <segue destination="DQr-Ni-Hzc" kind="relationship" relationship="viewControllers" id="QBB-Rs-rb1"/>
+                        <segue destination="gpL-fZ-jJz" kind="relationship" relationship="viewControllers" id="0uf-mN-zdS"/>
+                        <segue destination="KIr-pL-h7Y" kind="relationship" relationship="viewControllers" id="aVI-hl-XRa"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="29f-T6-uIk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="checkmark" catalog="system" width="128" height="118"/>
+        <image name="gamecontroller.fill" catalog="system" width="128" height="82"/>
+        <image name="gear" catalog="system" width="128" height="128"/>
+        <image name="house.fill" catalog="system" width="128" height="108"/>
+        <image name="list.number" catalog="system" width="128" height="101"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.53333333329999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.55294117649999996" blue="0.15686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.79607843140000001" green="0.18823529410000001" blue="0.87843137250000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.21960784310000001" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
