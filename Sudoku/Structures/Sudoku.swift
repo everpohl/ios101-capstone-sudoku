@@ -54,4 +54,43 @@ struct SudokuGame: Codable, Identifiable {
     var isSolved: Bool {
         return solution == board
     }
+    
+    func conflictingCells() -> Set<Position> {
+        var conflicts = Set<Position>()
+
+        // Flags every cell in the group whose value appears more than once.
+        func check(_ group: [Position]) {
+            var seen: [Int: [Position]] = [:]
+            for pos in group {
+                if let v = board[pos.row][pos.col] {
+                    seen[v, default: []].append(pos)
+                }
+            }
+            for positions in seen.values where positions.count > 1 {
+                conflicts.formUnion(positions)
+            }
+        }
+
+        for i in 0..<9 {
+            // Row i
+            check((0..<9).map { Position(row: i, col: $0) })
+            // Column i
+            check((0..<9).map { Position(row: $0, col: i) })
+            // Box i (boxes numbered 0–8, left to right, top to bottom)
+            let r0 = (i / 3) * 3, c0 = (i % 3) * 3
+            check((0..<9).map { Position(row: r0 + $0 / 3, col: c0 + $0 % 3) })
+        }
+        return conflicts
+    }
+}
+
+struct Position: Hashable, Codable {
+    let row: Int
+    let col: Int
+
+    var box: Int { (row / 3) * 3 + col / 3 }  // 0–8, handy for box checks
+
+    func isRelated(to other: Position) -> Bool {
+        row == other.row || col == other.col || box == other.box
+    }
 }

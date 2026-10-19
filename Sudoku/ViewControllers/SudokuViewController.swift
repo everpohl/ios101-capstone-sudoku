@@ -7,15 +7,18 @@
 
 import UIKit
 
-class SudokuViewController: UIViewController {
+class SudokuViewController: UIViewController, BoardViewDelegate {
 
+    @IBOutlet var boardView: BoardView!
     @IBOutlet var buttonCollection: [UIButton]!
     @IBOutlet weak var pencilButton: UIButton!
     
     var game: SudokuGame! {
         didSet { GameStore.shared.update(game)}
     }
+    private var selected: (row: Int, col: Int)?
     
+    //MARK: - UI View Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         //format number buttons and undo/redo/eraser
@@ -33,14 +36,18 @@ class SudokuViewController: UIViewController {
         
         //format pencil button
         var config = UIButton.Configuration.prominentClearGlass()
-        config.baseForegroundColor = Theme.current.color
+//        config.baseForegroundColor = Theme.current.color
+        config.baseBackgroundColor = Theme.current.color
         config.image = pencilButton.configuration?.image
         pencilButton.configuration = config
         
         //format navigation bar
         navigationItem.title = "Sudoku"
         navigationItem.style = .editor
-        navigationItem.subtitle = "normal - 13:65"
+        let difficulty = game.difficulty.rawValue.capitalized
+        navigationItem.subtitle = "\(difficulty) - 13:65"
+        boardView.delegate = self
+        renderBoard()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -56,6 +63,7 @@ class SudokuViewController: UIViewController {
         GameStore.shared.update(game)
     }
     
+    //MARK: - Gameplay Methods
     func playerEntered(_ value: Int, atRow row: Int, atCol col: Int) {
         if game.play(value, row: row, col: col) {
             GameStore.shared.update(game)
@@ -65,18 +73,43 @@ class SudokuViewController: UIViewController {
         }
     }
     
+    func boardView(_ boardView: BoardView, didSelectRow row: Int, column: Int) {
+            selected = (row, column)
+            renderBoard()
+        }
+
+        @IBAction func numberTapped(_ sender: UIButton) {
+            guard let s = selected else { return }
+            playerEntered(sender.tag, atRow: s.row, atCol: s.col)
+            renderBoard()
+        }
+
+    
     private func renderBoard() {
         //update each cell based on the game.board param, including marking invlaid cells with red
+        let conflicts = game.conflictingCells()  // e.g. Set<Position>, computed in the model
+        let selectedValue = selected.flatMap { game.board[$0.row][$0.col] }
+
+        for r in 0..<9 {
+            for c in 0..<9 {
+                let value = game.board[r][c]
+                var highlight = CellHighlight.none
+                if let s = selected {
+                    if r == s.row && c == s.col {
+                        highlight = .selected
+                    } else if value != nil && value == selectedValue {
+                        highlight = .sameNumber
+                    } else if r == s.row || c == s.col || (r / 3 == s.row / 3 && c / 3 == s.col / 3) {
+                        highlight = .related
+                    }
+                }
+                boardView.cell(row: r, column: c).configure(
+                    value: value,
+                    isGiven: game.initial[r][c],
+                    highlight: highlight,
+                    isConflict: conflicts.contains(Position(row: r, col: c))
+                )
+            }
+        }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

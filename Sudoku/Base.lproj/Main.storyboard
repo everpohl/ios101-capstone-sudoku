@@ -90,11 +90,11 @@
         <scene sceneID="Rtu-XF-hF2">
             <objects>
                 <viewController title="Sudoku" id="1tA-Zb-8lW" customClass="SudokuViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="iOE-hk-I8Z">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="iOE-hk-I8Z">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cVy-YK-Waf">
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cVy-YK-Waf">
                                 <rect key="frame" x="26.666666666666657" y="485" width="340" height="130"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jv2-wM-jrt">
@@ -229,7 +229,7 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="z3b-P4-STJ">
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="z3b-P4-STJ">
                                 <rect key="frame" x="33.666666666666657" y="645" width="326" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-pR-GHA">
@@ -268,12 +268,24 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2c-iW-NFe" customClass="BoardView" customModule="Sudoku" customModuleProvider="target">
+                                <rect key="frame" x="10" y="182" width="373" height="373"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="y2c-iW-NFe" secondAttribute="height" multiplier="1:1" id="xB5-Il-Vt5"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="E2Z-mc-dHM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="y2c-iW-NFe" firstAttribute="top" secondItem="E2Z-mc-dHM" secondAttribute="top" constant="10" id="AV2-s0-JsR"/>
                             <constraint firstItem="z3b-P4-STJ" firstAttribute="top" secondItem="cVy-YK-Waf" secondAttribute="bottom" constant="30" id="Spf-QF-vJ4"/>
                             <constraint firstItem="z3b-P4-STJ" firstAttribute="centerX" secondItem="iOE-hk-I8Z" secondAttribute="centerX" id="aHi-Jg-P10"/>
+                            <constraint firstItem="y2c-iW-NFe" firstAttribute="centerX" secondItem="iOE-hk-I8Z" secondAttribute="centerX" id="e2S-PE-cnh"/>
+                            <constraint firstItem="E2Z-mc-dHM" firstAttribute="trailing" secondItem="y2c-iW-NFe" secondAttribute="trailing" constant="10" id="jCr-en-seW"/>
+                            <constraint firstItem="cVy-YK-Waf" firstAttribute="top" relation="greaterThanOrEqual" secondItem="y2c-iW-NFe" secondAttribute="bottom" constant="13" id="kPl-fb-uH4"/>
+                            <constraint firstItem="y2c-iW-NFe" firstAttribute="leading" secondItem="E2Z-mc-dHM" secondAttribute="leading" constant="10" id="kt9-Ok-HpN"/>
                             <constraint firstItem="cVy-YK-Waf" firstAttribute="centerX" secondItem="iOE-hk-I8Z" secondAttribute="centerX" id="oE4-XL-OuU"/>
                             <constraint firstItem="E2Z-mc-dHM" firstAttribute="bottom" secondItem="z3b-P4-STJ" secondAttribute="bottom" constant="30" id="xTF-oi-r8q"/>
                         </constraints>
@@ -285,6 +297,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="boardView" destination="y2c-iW-NFe" id="LIE-jZ-XQE"/>
                         <outlet property="pencilButton" destination="tXA-ac-wfI" id="cY7-aH-zdM"/>
                         <outletCollection property="buttonCollection" destination="egn-F0-qkv" collectionClass="NSMutableArray" id="zPf-he-Ryw"/>
                         <outletCollection property="buttonCollection" destination="Ime-o3-1BW" collectionClass="NSMutableArray" id="hD5-Ic-zOc"/>
@@ -303,7 +316,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5q-rx-AuQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2741" y="1492"/>
+            <point key="canvasLocation" x="2739.6946564885493" y="1491.549295774648"/>
         </scene>
         <!--Settings-->
         <scene sceneID="L5v-tb-B89">
