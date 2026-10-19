@@ -55,7 +55,8 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         for button in buttonCollection {
             button.configuration?.baseBackgroundColor = Theme.current.color
         }
-        pencilButton.configuration?.baseForegroundColor = Theme.current.color
+        pencilButton.configuration?.image?.withTintColor(Theme.current.color) //= Theme.current.color
+        renderBoard()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,17 +71,23 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             renderBoard()
         } else {
             //indicate cell can't be modified
+            
         }
     }
     
     func boardView(_ boardView: BoardView, didSelectRow row: Int, column: Int) {
-        selected = (row, column)
+        if (selected ?? (9, 9) == (row, column)) {
+            print("double tap")
+            selected = nil
+        } else {
+            selected = (row, column)
+        }
         renderBoard()
     }
 
     private func renderBoard() {
         //update each cell based on the game.board param, including marking invlaid cells with red
-        let conflicts = game.conflictingCells()  // e.g. Set<Position>, computed in the model
+        let conflicts = game.conflictingCells()
         let selectedValue = selected.flatMap { game.board[$0.row][$0.col] }
 
         for r in 0..<9 {
@@ -111,5 +118,26 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         guard let s = selected else { return }
         playerEntered(sender.tag, atRow: s.row, atCol: s.col)
         renderBoard()
+    }
+    @IBAction func pencilToggle(_ sender: UIButton) {
+    }
+    @IBAction func undoButton(_ sender: UIButton) {
+    }
+    @IBAction func redoButton(_ sender: UIButton) {
+    }
+    @IBAction func eraserButton(_ sender: UIButton) {
+    }
+    @IBAction func pauseButton(_ sender: UIBarButtonItem) {
+    }
+    @IBAction func pressedReset(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "Are you sure you want to restart to the original board layout?", message: "This action cannot be undone", preferredStyle: .alert)
+        let reset = UIAlertAction(title: "Restart", style: .destructive) { [unowned self] _ in
+            game.restart()
+            renderBoard()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(reset)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
 }

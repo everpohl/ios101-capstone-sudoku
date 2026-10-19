@@ -18,7 +18,7 @@ class SudokuTableViewController: UITableViewController {
         tableView.delegate = self
         newGame.menu = UIMenu(title: "New Game", children: Difficulty.allCases.map { difficulty in
             UIAction(title: difficulty.rawValue.capitalized) { [weak self] _ in
-                self?.startNewGame(difficulty)
+                self?.startNewGame(difficulty, 3)
             }
         })
 
@@ -77,7 +77,7 @@ class SudokuTableViewController: UITableViewController {
     }
     
     //MARK: Creating boards methods
-    private func startNewGame(_ difficulty: Difficulty) {
+    private func startNewGame(_ difficulty: Difficulty, _ size: Int) {
         guard !isCreatingGame else { return }
         isCreatingGame = true
 
@@ -93,11 +93,11 @@ class SudokuTableViewController: UITableViewController {
 
             switch result {
             case .success(let response):
-                let game = SudokuGame(from: response, difficulty: difficulty)
+                let game = SudokuGame(from: response, difficulty: difficulty, size: size)
                 GameStore.shared.add(game)
                 self.performSegue(withIdentifier: "showGame", sender: game)
             case .failure(let error):
-                self.showError(error) { [weak self] in self?.startNewGame(difficulty) }
+                self.showError(error) { [weak self] in self?.startNewGame(difficulty, size) }
             }
         }
     }

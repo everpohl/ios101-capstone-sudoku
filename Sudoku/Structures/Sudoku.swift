@@ -26,17 +26,19 @@ struct SudokuGame: Codable, Identifiable {
     let solution: [[Int]]
     let initial: [[Bool]]
     var difficulty: Difficulty
+    let size: Int
     private(set) var board: [[Int?]]
     private(set) var mistakes = 0
     var lastPlayed: Date
     
-    init(from response: SudokuAPIResponse, difficulty: Difficulty) {
+    init(from response: SudokuAPIResponse, difficulty: Difficulty, size: Int) {
         self.id = UUID()
         self.difficulty = difficulty
         solution = response.solution
         board = response.puzzle
         initial = response.puzzle.map {row in row.map { $0 != nil} }
         self.lastPlayed = Date()
+        self.size = size
     }
     
     mutating func play(_ value: Int, row: Int, col: Int) -> Bool {
@@ -49,6 +51,16 @@ struct SudokuGame: Codable, Identifiable {
         }
         lastPlayed = Date()
         return true
+    }
+    
+    mutating func restart() {
+        mistakes = 0
+        for r in board.indices {
+            for c in board[r].indices where !initial[r][c] {
+                board[r][c] = nil
+            }
+        }
+        
     }
     
     var isSolved: Bool {
