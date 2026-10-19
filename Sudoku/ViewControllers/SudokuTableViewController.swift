@@ -101,6 +101,15 @@ class SudokuTableViewController: UITableViewController {
         }
     }
     
+    private func showError(_ error: Error, retry: @escaping () -> Void) {
+            let alert = UIAlertController(title: "Couldn't create a puzzle",
+                                          message: error.localizedDescription,
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            alert.addAction(UIAlertAction(title: "Retry", style: .default) { _ in retry() })
+            present(alert, animated: true)
+        }
+    
 
     /*
     // Override to support rearranging the table view.
