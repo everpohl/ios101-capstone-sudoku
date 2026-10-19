@@ -5,6 +5,8 @@
 //  Created by Everett Matthew Pohl on 10/15/26.
 //
 
+import Foundation
+
 nonisolated struct SudokuAPIResponse: Codable {
     let puzzle: [[Int?]]
     let solution: [[Int]]
@@ -15,16 +17,26 @@ nonisolated struct SudokuAPIResponse: Codable {
     }
 }
 
-struct SudokuGame {
+enum Difficulty: String, Codable, CaseIterable {
+    case easy, medium, hard
+}
+
+struct SudokuGame: Codable, Identifiable {
+    let id : UUID
     let solution: [[Int]]
     let initial: [[Bool]]
+    var difficulty: Difficulty
     private(set) var board: [[Int?]]
     private(set) var mistakes = 0
+    var lastPlayed: Date
     
     init(from response: SudokuAPIResponse) {
+        self.id = UUID()
+        self.difficulty = .medium
         solution = response.solution
         board = response.puzzle
         initial = response.puzzle.map {row in row.map { $0 != nil} }
+        self.lastPlayed = Date()
     }
     
     mutating func play(_ value: Int, row: Int, col: Int) -> Bool {
@@ -35,6 +47,7 @@ struct SudokuGame {
         if (solution[row][col] != value) {
             mistakes += 1
         }
+        lastPlayed = Date()
         return true
     }
     

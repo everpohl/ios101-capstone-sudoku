@@ -41,7 +41,7 @@
         <!--Sudoku Games-->
         <scene sceneID="6Mj-KZ-fMW">
             <objects>
-                <tableViewController title="Sudoku Games" id="Wli-kh-nms" sceneMemberID="viewController">
+                <tableViewController title="Sudoku Games" id="Wli-kh-nms" customClass="SudokuTableViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="Trh-VU-xrt">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -49,7 +49,7 @@
                         <sections>
                             <tableViewSection id="HtD-Lt-TjD">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="zbc-dG-Q8p">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GameCell" id="zbc-dG-Q8p">
                                         <rect key="frame" x="0.0" y="50" width="393" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zbc-dG-Q8p" id="A0m-8H-94g">
@@ -66,42 +66,8 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="1tA-Zb-8lW" kind="show" id="zTb-TW-VIo"/>
+                                            <segue destination="1tA-Zb-8lW" kind="show" identifier="showGame" id="zTb-TW-VIo"/>
                                         </connections>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="iIM-tr-hRf">
-                                        <rect key="frame" x="0.0" y="101" width="393" height="51"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="iIM-tr-hRf" id="FIV-UI-aXf">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test Game" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q0I-VK-2A7">
-                                                    <rect key="frame" x="20" y="15" width="82" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="JQp-HZ-5zd">
-                                        <rect key="frame" x="0.0" y="152" width="393" height="51"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JQp-HZ-5zd" id="7ra-mc-3Qt">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test Game" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pGE-Sg-Ckc">
-                                                    <rect key="frame" x="20" y="15" width="82" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -111,7 +77,13 @@
                             <outlet property="delegate" destination="Wli-kh-nms" id="pLe-QG-NA3"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="eXo-EU-xOF"/>
+                    <navigationItem key="navigationItem" title="Sudoku Games" id="eXo-EU-xOF">
+                        <barButtonItem key="rightBarButtonItem" image="square.and.pencil" catalog="system" id="155-uC-meZ"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="newGame" destination="155-uC-meZ" id="HMv-nQ-GKr"/>
+                        <outlet property="tableView" destination="Trh-VU-xrt" id="az3-wb-1GL"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QXZ-am-cTJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -591,6 +563,7 @@
         <image name="list.number" catalog="system" width="128" height="101"/>
         <image name="pause.fill" catalog="system" width="110" height="128"/>
         <image name="pencil" catalog="system" width="128" height="118"/>
+        <image name="square.and.pencil" catalog="system" width="128" height="125"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

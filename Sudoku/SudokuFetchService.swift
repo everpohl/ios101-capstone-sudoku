@@ -8,15 +8,9 @@
 import Foundation
 
 class SudokuFetchService {
-    enum Difficulty: String {
-        case easy = "easy"
-        case medium = "medium"
-        case hard = "hard"
-    }
-    
     static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: ((SudokuAPIResponse) -> Void)? = nil) {
         let apiKey = Secrets.apiKey
-        let parameters = "difficulty=\(difficulty)&width=\(width)&height=\(height)"
+        let parameters = "difficulty=\(difficulty.rawValue)&width=\(width)&height=\(height)"
         let url = URL(string: "https://api.api-ninjas.com/v1/sudokugenerate?\(parameters)")!
         
         //claude's code to pass the api key into the header

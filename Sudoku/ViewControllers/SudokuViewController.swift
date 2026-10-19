@@ -11,7 +11,10 @@ class SudokuViewController: UIViewController {
 
     @IBOutlet var buttonCollection: [UIButton]!
     @IBOutlet weak var pencilButton: UIButton!
-    private var game: SudokuGame?
+    
+    var game: SudokuGame! {
+        didSet { GameStore.shared.update(game)}
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +47,24 @@ class SudokuViewController: UIViewController {
             button.configuration?.baseBackgroundColor = Theme.current.color
         }
         pencilButton.configuration?.baseForegroundColor = Theme.current.color
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        GameStore.shared.update(game)
+    }
+    
+    func playerEntered(_ value: Int, atRow row: Int, atCol col: Int) {
+        if game.play(value, row: row, col: col) {
+            GameStore.shared.update(game)
+            renderBoard()
+        } else {
+            //indicate cell can't be modified
+        }
+    }
+    
+    private func renderBoard() {
+        //update each cell based on the game.board param, including marking invlaid cells with red
     }
 
     /*
