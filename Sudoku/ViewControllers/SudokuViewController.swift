@@ -74,17 +74,10 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     }
     
     func boardView(_ boardView: BoardView, didSelectRow row: Int, column: Int) {
-            selected = (row, column)
-            renderBoard()
-        }
+        selected = (row, column)
+        renderBoard()
+    }
 
-        @IBAction func numberTapped(_ sender: UIButton) {
-            guard let s = selected else { return }
-            playerEntered(sender.tag, atRow: s.row, atCol: s.col)
-            renderBoard()
-        }
-
-    
     private func renderBoard() {
         //update each cell based on the game.board param, including marking invlaid cells with red
         let conflicts = game.conflictingCells()  // e.g. Set<Position>, computed in the model
@@ -111,5 +104,11 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
                 )
             }
         }
+    }
+    
+    @IBAction func pressedNumberButton(_ sender: UIButton) {
+        guard let s = selected else { return }
+        playerEntered(sender.tag, atRow: s.row, atCol: s.col)
+        renderBoard()
     }
 }
