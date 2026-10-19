@@ -49,10 +49,11 @@ class SudokuTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath)
         let game = games[indexPath.row]
+        let difficulty = game.difficulty.rawValue.capitalized
         var config = cell.defaultContentConfiguration()
-        config.text = game.difficulty.rawValue.capitalized
-//        let filled = game.board.filter { $0 != 0 }.count
-//        config.secondaryText = "\(filled)/81 filled · \(game.lastPlayed.formatted(.relative(presentation: .named)))"
+        config.text = "\(difficulty) Puzzle"
+        let filled = game.board.joined().filter { $0 != nil }.count
+        config.secondaryText = "\(filled)/81 filled - \(game.lastPlayed.formatted(.relative(presentation: .named)))"
         cell.contentConfiguration = config
         return cell
     }
@@ -134,8 +135,13 @@ class SudokuTableViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         guard segue.identifier == "showGame",
-                      let gameVC = segue.destination as? SudokuViewController,
-                      let indexPath = tableView.indexPathForSelectedRow else { return }
-                gameVC.game = games[indexPath.row]
+              let gameVC = segue.destination as? SudokuViewController else { return }
+
+        // A newly created game is passed as the sender; otherwise use the tapped row.
+        if let game = sender as? SudokuGame {
+            gameVC.game = game
+        } else if let indexPath = tableView.indexPathForSelectedRow {
+            gameVC.game = games[indexPath.row]
+        }
     }
 }

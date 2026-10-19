@@ -25,6 +25,8 @@ class SudokuViewController: UIViewController {
             config.attributedTitle = button.configuration?.attributedTitle
             config.baseForegroundColor = button.tintColor
             config.baseBackgroundColor = Theme.current.color
+            config.imagePadding = 7
+            config.titlePadding = 7
             config.image = button.configuration?.image
             button.configuration = config
         }
