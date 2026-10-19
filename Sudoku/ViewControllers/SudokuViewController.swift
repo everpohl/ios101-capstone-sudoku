@@ -106,6 +106,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
     }
     
+    //later: add check that pencil mode isn't turned on, then add process for placing pencil values
     @IBAction func pressedNumberButton(_ sender: UIButton) {
         guard let s = selected else { return }
         playerEntered(sender.tag, atRow: s.row, atCol: s.col)

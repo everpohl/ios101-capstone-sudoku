@@ -11,6 +11,7 @@ enum CellHighlight { case none, related, sameNumber, selected }
 
 final class CellView: UIView {
     private let label = UILabel()
+    private let tintView = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,6 +23,11 @@ final class CellView: UIView {
             label.centerXAnchor.constraint(equalTo: centerXAnchor),
             label.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+        backgroundColor = .systemBackground
+        tintView.frame = bounds
+        tintView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        tintView.isUserInteractionEnabled = false
+        insertSubview(tintView, at: 0)   // sits behind the label
     }
     required init?(coder: NSCoder) { fatalError() }
 
@@ -29,10 +35,10 @@ final class CellView: UIView {
         label.text = value.map(String.init) ?? ""
         label.textColor = isConflict ? .systemRed : (isGiven ? .label : .systemBlue)
         switch highlight {
-        case .none:       backgroundColor = .systemBackground
-        case .related:    backgroundColor = .secondarySystemFill
-        case .sameNumber: backgroundColor = .systemBlue.withAlphaComponent(0.25)
-        case .selected:   backgroundColor = .systemBlue.withAlphaComponent(0.4)
+        case .none:       tintView.backgroundColor = .systemBackground
+        case .related:    tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.2)
+        case .sameNumber: tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.2)
+        case .selected:   tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.4)
         }
     }
 }
