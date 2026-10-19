@@ -15,21 +15,27 @@ class SudokuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //format number buttons and undo/redo/eraser
         for button in buttonCollection {
             button.layer.cornerRadius = button.frame.width/2
             var config = UIButton.Configuration.prominentGlass()
-//            config.title = button.configuration?.title
             config.attributedTitle = button.configuration?.attributedTitle
             config.baseForegroundColor = button.tintColor
             config.baseBackgroundColor = Theme.current.color
             config.image = button.configuration?.image
             button.configuration = config
         }
+        
+        //format pencil button
         var config = UIButton.Configuration.prominentClearGlass()
         config.baseForegroundColor = Theme.current.color
         config.image = pencilButton.configuration?.image
         pencilButton.configuration = config
-        // Do any additional setup after loading the view.
+        
+        //format navigation bar
+        navigationItem.title = "Sudoku"
+        navigationItem.style = .editor
+        navigationItem.subtitle = "normal - 13:65"
     }
     
     override func viewDidAppear(_ animated: Bool) {

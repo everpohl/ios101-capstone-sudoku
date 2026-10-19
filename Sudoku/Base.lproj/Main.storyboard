@@ -12,7 +12,6 @@
         <!--High Scores-->
         <scene sceneID="JGU-zH-cyY">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1p6-iG-nzG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tableViewController id="gpL-fZ-jJz" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="s4u-7D-nL9">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
@@ -35,6 +34,7 @@
                     </tableView>
                     <tabBarItem key="tabBarItem" title="High Scores" image="list.number" catalog="system" id="coG-VU-dCH"/>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1p6-iG-nzG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="410" y="1492"/>
         </scene>
@@ -42,7 +42,7 @@
         <scene sceneID="6Mj-KZ-fMW">
             <objects>
                 <tableViewController title="Sudoku Games" id="Wli-kh-nms" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Trh-VU-xrt">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="Trh-VU-xrt">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -309,7 +309,12 @@
                             <constraint firstItem="E2Z-mc-dHM" firstAttribute="bottom" secondItem="z3b-P4-STJ" secondAttribute="bottom" constant="30" id="xTF-oi-r8q"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Sudoku" id="hYJ-uv-68G"/>
+                    <navigationItem key="navigationItem" title="Sudoku" id="hYJ-uv-68G">
+                        <rightBarButtonItems>
+                            <barButtonItem image="arrow.clockwise" catalog="system" id="N2z-i2-kzJ"/>
+                            <barButtonItem title="Item" image="pause.fill" catalog="system" id="jQE-cT-oi7"/>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
                         <outlet property="pencilButton" destination="tXA-ac-wfI" id="cY7-aH-zdM"/>
                         <outletCollection property="buttonCollection" destination="egn-F0-qkv" collectionClass="NSMutableArray" id="zPf-he-Ryw"/>
@@ -340,7 +345,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Section-1" id="JcZ-Wa-8Z8">
+                            <tableViewSection headerTitle="Settings" id="JcZ-Wa-8Z8">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Q81-7V-RFI">
                                         <rect key="frame" x="0.0" y="50" width="393" height="51"/>
@@ -539,6 +544,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="W9w-Sz-rPz" customClass="tabBarViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NmR-29-rVZ">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -576,12 +582,14 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.clockwise" catalog="system" width="107" height="128"/>
         <image name="arrow.uturn.backward" catalog="system" width="128" height="117"/>
         <image name="arrow.uturn.forward" catalog="system" width="128" height="117"/>
         <image name="checkmark" catalog="system" width="128" height="118"/>
         <image name="gamecontroller.fill" catalog="system" width="128" height="82"/>
         <image name="gear" catalog="system" width="128" height="128"/>
         <image name="list.number" catalog="system" width="128" height="101"/>
+        <image name="pause.fill" catalog="system" width="110" height="128"/>
         <image name="pencil" catalog="system" width="128" height="118"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
