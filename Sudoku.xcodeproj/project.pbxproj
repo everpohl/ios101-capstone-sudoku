@@ -198,6 +198,8 @@
 		};
 		9CBC6D9D3081967900E24367 /* Debug configuration for PBXProject "Sudoku" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9CBC6D893081967900E24367 /* Sudoku */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -262,6 +264,8 @@
 		};
 		9CBC6D9E3081967900E24367 /* Release configuration for PBXProject "Sudoku" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 9CBC6D893081967900E24367 /* Sudoku */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
