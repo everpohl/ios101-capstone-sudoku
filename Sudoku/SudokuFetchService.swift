@@ -7,8 +7,13 @@
 
 import Foundation
 
+enum SudokuFetchError: Error {
+    case badStatus(Int)
+    case noData
+}
+
 class SudokuFetchService {
-    static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: ((SudokuAPIResponse) -> Void)? = nil) {
+    static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: @escaping (Result<SudokuAPIResponse, Error>) -> Void) {
         let apiKey = Secrets.apiKey
         let parameters = "difficulty=\(difficulty.rawValue)&width=\(width)&height=\(height)"
         let url = URL(string: "https://api.api-ninjas.com/v1/sudokugenerate?\(parameters)")!
@@ -17,24 +22,20 @@ class SudokuFetchService {
         var request = URLRequest(url: url)
         request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                assertionFailure("Error: \(error!.localizedDescription)")
-                return
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let result: Result<SudokuAPIResponse, Error>
+
+            if let error {
+                result = .failure(error)
+            } else if let http = response as? HTTPURLResponse, http.statusCode != 200 {
+                result = .failure(SudokuFetchError.badStatus(http.statusCode))
+            } else if let data {
+                result = Result { try JSONDecoder().decode(SudokuAPIResponse.self, from: data) }
+            } else {
+                result = .failure(SudokuFetchError.noData)
             }
-            guard let httpResponse = response as? HTTPURLResponse else {
-                assertionFailure("Invalid Response")
-                return
-            }
-            guard let data = data, httpResponse.statusCode == 200 else {
-                assertionFailure("Invalid response status code: \(httpResponse.statusCode)")
-                return
-            }
-            let response = try! JSONDecoder().decode(SudokuAPIResponse.self, from: data)
-            DispatchQueue.main.async {
-                completion?(response) //call the completion colosure and pass in the forecast data model
-            }
-        }
-        task.resume()
+
+            DispatchQueue.main.async { completion(result) }
+        }.resume()
     }
 }

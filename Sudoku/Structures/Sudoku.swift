@@ -30,9 +30,9 @@ struct SudokuGame: Codable, Identifiable {
     private(set) var mistakes = 0
     var lastPlayed: Date
     
-    init(from response: SudokuAPIResponse) {
+    init(from response: SudokuAPIResponse, difficulty: Difficulty) {
         self.id = UUID()
-        self.difficulty = .medium
+        self.difficulty = difficulty
         solution = response.solution
         board = response.puzzle
         initial = response.puzzle.map {row in row.map { $0 != nil} }
