@@ -13,8 +13,9 @@ class SudokuFetchService {
         case medium = "medium"
         case hard = "hard"
     }
+    
     static func fetchSudoku(difficulty: Difficulty, width: Int, height: Int, completion: ((SudokuAPIResponse) -> Void)? = nil) {
-        let apiKey = "***REMOVED***"
+        let apiKey = Secrets.apiKey
         let parameters = "difficulty=\(difficulty)&width=\(width)&height=\(height)"
         let url = URL(string: "https://api.api-ninjas.com/v1/sudokugenerate?\(parameters)")!
         
