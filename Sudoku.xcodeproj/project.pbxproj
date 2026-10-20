@@ -131,8 +131,10 @@
 		9CBC6D9B3081967900E24367 /* Debug configuration for PBXNativeTarget "Sudoku" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Sudoku-Blue Sudoku-Green Sudoku-Orange Sudoku-Pink Sudoku-Red Sudoku-Yellow Sudoku-Purple";
+				ASSETCATALOG_COMPILER_APPICON_NAME = Sudoku;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 66253Y8DGT;
@@ -165,8 +167,10 @@
 		9CBC6D9C3081967900E24367 /* Release configuration for PBXNativeTarget "Sudoku" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Sudoku-Blue Sudoku-Green Sudoku-Orange Sudoku-Pink Sudoku-Red Sudoku-Yellow Sudoku-Purple";
+				ASSETCATALOG_COMPILER_APPICON_NAME = Sudoku;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 66253Y8DGT;
