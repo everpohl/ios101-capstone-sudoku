@@ -85,20 +85,27 @@ class SudokuTableViewController: UITableViewController {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.startAnimating()
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
-
-        SudokuFetchService.fetchSudoku(difficulty: difficulty, width: 3, height: 3) { [weak self] result in
-            guard let self else { return }
-            self.isCreatingGame = false
-            self.navigationItem.rightBarButtonItem = addButton
-
-            switch result {
-            case .success(let response):
-                let game = SudokuGame(from: response, difficulty: difficulty, size: size)
-                GameStore.shared.add(game)
-                self.performSegue(withIdentifier: "showGame", sender: game)
-            case .failure(let error):
-                self.showError(error) { [weak self] in self?.startNewGame(difficulty, size) }
+        if (UserDefaults.standard.bool(forKey: "api")) {
+            SudokuFetchService.fetchSudoku(difficulty: difficulty, width: 3, height: 3) { [weak self] result in
+                guard let self else { return }
+                self.isCreatingGame = false
+                self.navigationItem.rightBarButtonItem = addButton
+                
+                switch result {
+                case .success(let response):
+                    let game = SudokuGame(from: response, difficulty: difficulty, size: size)
+                    GameStore.shared.add(game)
+                    self.performSegue(withIdentifier: "showGame", sender: game)
+                case .failure(let error):
+                    self.showError(error) { [weak self] in self?.startNewGame(difficulty, size) }
+                }
             }
+        } else {
+            let game = SudokuGenerationService.generateBoard(size: size, difficulty: difficulty)
+            isCreatingGame = false
+            navigationItem.rightBarButtonItem = addButton
+            GameStore.shared.add(game)
+            performSegue(withIdentifier: "showGame", sender: game)
         }
     }
     
