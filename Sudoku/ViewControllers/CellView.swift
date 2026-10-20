@@ -41,4 +41,26 @@ final class CellView: UIView {
         case .selected:   tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.4)
         }
     }
+    
+    /// Wiggles the cell horizontally to show that it can't be edited.
+//    func shake() {
+//        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+//        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+//        animation.duration = 0.4
+//        // Offsets in points: swings that get smaller, ending back at 0
+//        animation.values = [0, -8, 8, -6, 6, -3, 3, 0]
+//        layer.add(animation, forKey: "shake")
+//    }
+    func shake() {
+        let wiggle = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        wiggle.values = [0, -8, 8, -6, 6, -3, 3, 0]
+
+        let pop = CAKeyframeAnimation(keyPath: "transform.scale")
+        pop.values = [1.0, 1.1, 1.0]   // briefly shrinks to 90%, then back
+
+        let group = CAAnimationGroup()
+        group.animations = [wiggle, pop]
+        group.duration = 0.4
+        layer.add(group, forKey: "shake")
+    }
 }

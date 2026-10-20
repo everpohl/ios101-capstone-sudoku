@@ -9,6 +9,9 @@ import UIKit
 
 class SudokuViewController: UIViewController, BoardViewDelegate {
 
+    @IBOutlet var undoButton: UIButton!
+    @IBOutlet var redoButton: UIButton!
+    @IBOutlet var eraseButton: UIButton!
     @IBOutlet var boardView: BoardView!
     @IBOutlet var buttonCollection: [UIButton]!
     @IBOutlet weak var pencilButton: UIButton!
@@ -17,6 +20,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         didSet { GameStore.shared.update(game)}
     }
     private var selected: (row: Int, col: Int)?
+    private var pencilMode = false
     
     //MARK: - UI View Methods
     override func viewDidLoad() {
@@ -26,7 +30,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             button.layer.cornerRadius = button.frame.width/2
             var config = UIButton.Configuration.prominentGlass()
             config.attributedTitle = button.configuration?.attributedTitle
-            config.baseForegroundColor = button.tintColor
+            config.baseForegroundColor = .white//.systemBackground
             config.baseBackgroundColor = Theme.current.color
             config.imagePadding = 7
             config.titlePadding = 7
@@ -35,11 +39,9 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
         
         //format pencil button
-        var config = UIButton.Configuration.prominentClearGlass()
-//        config.baseForegroundColor = Theme.current.color
-        config.baseBackgroundColor = Theme.current.color
-        config.image = pencilButton.configuration?.image
-        pencilButton.configuration = config
+        toggleOff(button: pencilButton)
+        toggleOff(button: undoButton)
+        toggleOff(button: eraseButton)
         
         //format navigation bar
         navigationItem.title = "Sudoku"
@@ -47,7 +49,34 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         let difficulty = game.difficulty.rawValue.capitalized
         navigationItem.subtitle = "\(difficulty) - 13:65"
         boardView.delegate = self
+        for i in 1...10 {
+            if game.numberFilled(value: i) {
+                buttonCollection.first(where: {$0.tag == i})?.isEnabled = false
+            }
+        }
         renderBoard()
+    }
+    
+    func toggleOff(button: UIButton) {
+        var config = UIButton.Configuration.prominentClearGlass()
+        config.attributedTitle = button.configuration?.attributedTitle
+        config.baseForegroundColor = Theme.current.color
+        config.image = button.configuration?.image
+        config.imagePadding = 7
+        config.titlePadding = 7
+        button.configuration = config
+    }
+    
+    func toggleOn(button: UIButton) {
+        button.layer.cornerRadius = button.frame.width/2
+        var config = UIButton.Configuration.prominentGlass()
+        config.attributedTitle = button.configuration?.attributedTitle
+        config.baseForegroundColor = .white//.systemBackground
+        config.baseBackgroundColor = Theme.current.color
+        config.imagePadding = 7
+        config.titlePadding = 7
+        config.image = button.configuration?.image
+        button.configuration = config
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,7 +84,12 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         for button in buttonCollection {
             button.configuration?.baseBackgroundColor = Theme.current.color
         }
-        pencilButton.configuration?.image?.withTintColor(Theme.current.color) //= Theme.current.color
+        for i in 1...10 {
+            if game.numberFilled(value: i) {
+                print("\(i) is filled")
+                buttonCollection.first(where: {$0.tag == i})?.isEnabled = false
+            }
+        }
         renderBoard()
     }
     
@@ -69,9 +103,13 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         if game.play(value, row: row, col: col) {
             GameStore.shared.update(game)
             renderBoard()
+            if game.numberFilled(value: value) {
+                buttonCollection.first(where: {$0.tag == value})?.isEnabled = false
+            }
         } else {
             //indicate cell can't be modified
-            
+            boardView.cell(row: row, column: col).shake()
+            UINotificationFeedbackGenerator().notificationOccurred(.error) // optional haptic
         }
     }
     
@@ -120,6 +158,12 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         renderBoard()
     }
     @IBAction func pencilToggle(_ sender: UIButton) {
+        if (pencilMode) {
+            toggleOn(button: sender)
+        } else {
+            toggleOff(button: sender)
+        }
+        pencilMode = !pencilMode
     }
     @IBAction func undoButton(_ sender: UIButton) {
     }

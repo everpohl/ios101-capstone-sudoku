@@ -60,11 +60,20 @@ struct SudokuGame: Codable, Identifiable {
                 board[r][c] = nil
             }
         }
-        
     }
     
     var isSolved: Bool {
         return solution == board
+    }
+    
+    func numberFilled(value: Int) -> Bool {
+        var count = 0
+        for r in board.indices {
+            for c in board[r].indices where board[r][c] == value {
+                count+=1
+            }
+        }
+        return count == size*size
     }
     
     func conflictingCells() -> Set<Position> {
