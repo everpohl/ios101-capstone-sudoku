@@ -15,12 +15,18 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     @IBOutlet var boardView: BoardView!
     @IBOutlet var buttonCollection: [UIButton]!
     @IBOutlet weak var pencilButton: UIButton!
+    @IBOutlet var mainStackView: UIStackView!
+    @IBOutlet var buttonsStackView: UIStackView!
     
     var game: SudokuGame! {
         didSet { GameStore.shared.update(game)}
     }
     private var selected: (row: Int, col: Int)?
     private var pencilMode = false
+    //the axis the buttons were last arranged for; nil until the first layout pass
+    private var currentAxis: NSLayoutConstraint.Axis?
+    private var pause = false
+    private var tickTask: Task<Void, Never>?
     
     //MARK: - UI View Methods
     override func viewDidLoad() {
@@ -30,7 +36,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             button.layer.cornerRadius = button.frame.width/2
             var config = UIButton.Configuration.prominentGlass()
             config.attributedTitle = button.configuration?.attributedTitle
-            config.baseForegroundColor = .white//.systemBackground
+            config.baseForegroundColor = .white
             config.baseBackgroundColor = Theme.current.color
             config.imagePadding = 7
             config.titlePadding = 7
@@ -41,13 +47,27 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         //format pencil button
         toggleOff(button: pencilButton)
         toggleOff(button: undoButton)
-        toggleOff(button: eraseButton)
+        toggleOff(button: redoButton)
+        toggleOn(button: eraseButton)
+        
+        //keep the undo/erase rows tall enough to tap. 999 instead of required so a very narrow
+        //window (e.g. a slim iPad split view) bends this rather than breaking the layout
+        let tallButtons: [UIButton] = [undoButton, eraseButton]
+        for button in tallButtons {
+            let minHeight = button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+            minHeight.priority = UILayoutPriority(999)
+            minHeight.isActive = true
+        }
         
         //format navigation bar
         navigationItem.title = "Sudoku"
         navigationItem.style = .editor
-        let difficulty = game.difficulty.rawValue.capitalized
-        navigationItem.subtitle = "\(difficulty) - 13:65"
+        tickTask = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.updateSubtitle()
+                try? await Task.sleep(for: .seconds(1))
+            }
+        }
         boardView.delegate = self
         for i in 1...10 {
             if game.numberFilled(value: i) {
@@ -55,6 +75,72 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             }
         }
         renderBoard()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        //Pick the stack axis from the space actually available, rather than size classes.
+        //This runs whenever the view's bounds change: rotation, iPhone Duo fold/unfold, split view, or window resizing.
+        let available = view.safeAreaLayoutGuide.layoutFrame.size
+        let axis: NSLayoutConstraint.Axis = available.width > available.height ? .horizontal : .vertical
+        //only rearrange on change so we don't trigger extra layout passes
+        guard axis != currentAxis else { return }
+        currentAxis = axis
+        mainStackView.axis = axis
+        //side by side, center the buttons vertically instead of stretching them to full height,
+        //since the number buttons are capped at a max size in the storyboard
+        mainStackView.alignment = axis == .horizontal ? .center : .fill
+        arrangeButtons(for: axis)
+    }
+    
+    /// Rebuilds the button rows for the current layout.
+    /// Side by side (.horizontal): a narrow 3-wide grid, so the board gets more width.
+    /// Stacked (.vertical): wide 5-across rows, so the board gets more height.
+    private func arrangeButtons(for axis: NSLayoutConstraint.Axis) {
+        let numbers = buttonCollection.sorted { $0.tag < $1.tag }
+        guard numbers.count == 9 else { return }
+        
+        let rows: [UIStackView]
+        if axis == .horizontal {
+            rows = [
+                makeRow(Array(numbers[0..<3]), equalWidths: true),
+                makeRow(Array(numbers[3..<6]), equalWidths: true),
+                makeRow(Array(numbers[6..<9]), equalWidths: true),
+                makeRow([undoButton, redoButton]),
+                makeRow([eraseButton, pencilButton])
+            ]
+        } else {
+            rows = [
+                makeRow(Array(numbers[0..<5]), equalWidths: true),
+                makeRow(Array(numbers[5..<9]) + [pencilButton], equalWidths: true),
+                makeRow([undoButton, redoButton, eraseButton], spacing: 13)
+            ]
+        }
+        
+        //the buttons have already moved into the new rows, so the old rows are empty.
+        //removing them also drops any width constraints that referenced them
+        for oldRow in buttonsStackView.arrangedSubviews {
+            oldRow.removeFromSuperview()
+        }
+        for row in rows {
+            buttonsStackView.addArrangedSubview(row)
+        }
+        //every row matches the first row's width, so the grid lines up.
+        //button 1 is always in the first row and its size constraints set that width
+        for row in rows.dropFirst() {
+            row.widthAnchor.constraint(equalTo: rows[0].widthAnchor).isActive = true
+        }
+    }
+    
+    /// Makes a horizontal row. Adding a button to the row moves it out of its old row,
+    /// keeping its outlets, actions, and size constraints.
+    private func makeRow(_ buttons: [UIButton], equalWidths: Bool = false, spacing: CGFloat = 10) -> UIStackView {
+        let row = UIStackView(arrangedSubviews: buttons)
+        row.axis = .horizontal
+        row.spacing = spacing
+        //number buttons share the width equally; the undo/redo/erase rows size from each button's aspect ratio
+        row.distribution = equalWidths ? .fillEqually : .fill
+        return row
     }
     
     func toggleOff(button: UIButton) {
@@ -71,7 +157,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         button.layer.cornerRadius = button.frame.width/2
         var config = UIButton.Configuration.prominentGlass()
         config.attributedTitle = button.configuration?.attributedTitle
-        config.baseForegroundColor = .white//.systemBackground
+        config.baseForegroundColor = .white
         config.baseBackgroundColor = Theme.current.color
         config.imagePadding = 7
         config.titlePadding = 7
@@ -90,10 +176,22 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             }
         }
         renderBoard()
+        if (!pause) {
+            game.timer.start()
+        }
+        tickTask = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.updateSubtitle()
+                try? await Task.sleep(for: .seconds(1))
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        tickTask?.cancel()
+        tickTask = nil
+        game.timer.pause()
         GameStore.shared.update(game)
     }
     
@@ -121,6 +219,16 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             selected = (row, column)
         }
         renderBoard()
+    }
+    
+    private func updateSubtitle() {
+        let difficulty = game.difficulty.rawValue.capitalized
+        let time = game.timer.elapsedTime.formatted(.time(pattern: .minuteSecond))
+        if(UserDefaults.standard.bool(forKey: "timer")) {
+            navigationItem.subtitle = "\(difficulty) Puzzle - \(time)"
+        } else {
+            navigationItem.subtitle = "\(difficulty) Puzzle"
+        }
     }
 
     private func renderBoard() {
@@ -185,7 +293,18 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         renderBoard()
     }
     
+    @IBOutlet var pauseBar: UIBarButtonItem!
     @IBAction func pauseButton(_ sender: UIBarButtonItem) {
+        if !game.timer.isRunning {
+            game.timer.start()
+            pauseBar.image = UIImage(systemName: "pause.fill")
+            pause = false
+        } else {
+            game.timer.pause()
+            pauseBar.image = UIImage(systemName: "play.fill")
+            pause = true
+        }
+        updateSubtitle()
     }
     
     @IBAction func pressedReset(_ sender: UIBarButtonItem) {

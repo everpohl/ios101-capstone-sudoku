@@ -11,8 +11,9 @@ class SettingsViewController: UITableViewController {
     @IBOutlet var themeIcon: UISwitch!
     @IBOutlet var highlightPeers: UISwitch!
     @IBOutlet var themeButtons: [UIButton]!
+    @IBOutlet var puzzleSource: UISegmentedControl!
     
-    
+    @IBOutlet var timerSwitch: UISwitch!
     @IBAction func themeButtonTapped(_ sender: UIButton) {
         let theme = Theme.allCases[sender.tag]
         Theme.current = theme
@@ -54,16 +55,33 @@ class SettingsViewController: UITableViewController {
         themeIcon.isOn = UserDefaults.standard.bool(forKey: "themeIcons")
     }
     
-    @IBAction func togglePeers(_ sender: Any) {
+    @IBAction func togglePeers(_ sender: UISwitch) {
         UserDefaults.standard.set(highlightPeers.isOn,forKey: "peers")
     }
     
+    @IBAction func toggleTimer(_ sender: UISwitch) {
+        UserDefaults.standard.set(sender.isOn, forKey: "timer")
+    }
+    
+    @IBAction func switchSource(_ sender: UISegmentedControl) {
+        if (puzzleSource.selectedSegmentIndex == 0) {
+            UserDefaults.standard.set(true, forKey: "api")
+        } else {
+            UserDefaults.standard.set(false, forKey: "api")
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 1. Deselect the row so it doesn't stay gray
-        tableView.deselectRow(at: indexPath, animated: true)
+//        tableView.deselectRow(at: indexPath, animated: true)
         if (indexPath[1] == 1) {
             themeIcon.setOn(!themeIcon.isOn, animated: true)
             switchedThemeIcon(themeIcon)
+        } else if (indexPath[1] == 2) {
+            highlightPeers.setOn(!highlightPeers.isOn, animated: true)
+            togglePeers(highlightPeers)
+        } else if (indexPath[1] == 3) {
+            timerSwitch.setOn(!timerSwitch.isOn, animated: true)
+            toggleTimer(timerSwitch)
         }
     }
 }
