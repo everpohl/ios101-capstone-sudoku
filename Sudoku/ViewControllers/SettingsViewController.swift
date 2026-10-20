@@ -50,6 +50,16 @@ class SettingsViewController: UITableViewController {
         let themeIndex = UserDefaults.standard.integer(forKey: "themeIndex")
         themeButtons.first { $0.tag == themeIndex }?.isSelected = true
         
-        themeIcon.isOn = UserDefaults.standard.bool(forKey:"themeIndex")
+        themeIcon.isOn = UserDefaults.standard.bool(forKey: "themeIcons")
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // 1. Deselect the row so it doesn't stay gray
+        tableView.deselectRow(at: indexPath, animated: true)
+        if (indexPath[1] == 1) {
+            // Tapping the row doesn't flip the switch on its own, so flip it here first
+            themeIcon.setOn(!themeIcon.isOn, animated: true)
+            switchedThemeIcon(themeIcon)
+        }
     }
 }
