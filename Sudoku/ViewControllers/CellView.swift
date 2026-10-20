@@ -33,7 +33,7 @@ final class CellView: UIView {
 
     func configure(value: Int?, isGiven: Bool, highlight: CellHighlight, isConflict: Bool) {
         label.text = value.map(String.init) ?? ""
-        label.textColor = isConflict ? .systemRed : (isGiven ? .label : .systemBlue)
+        label.textColor = isConflict ? UIColor(red: 1, green: 0, blue: 0, alpha: 1) : (isGiven ? .label : Theme.current.color)
         switch highlight {
         case .none:       tintView.backgroundColor = .systemBackground
         case .related:    tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.2)
@@ -41,16 +41,7 @@ final class CellView: UIView {
         case .selected:   tintView.backgroundColor = Theme.current.color.withAlphaComponent(0.4)
         }
     }
-    
-    /// Wiggles the cell horizontally to show that it can't be edited.
-//    func shake() {
-//        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
-//        animation.timingFunction = CAMediaTimingFunction(name: .linear)
-//        animation.duration = 0.4
-//        // Offsets in points: swings that get smaller, ending back at 0
-//        animation.values = [0, -8, 8, -6, 6, -3, 3, 0]
-//        layer.add(animation, forKey: "shake")
-//    }
+
     func shake() {
         let wiggle = CAKeyframeAnimation(keyPath: "transform.translation.x")
         wiggle.values = [0, -8, 8, -6, 6, -3, 3, 0]

@@ -86,7 +86,6 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
         for i in 1...10 {
             if game.numberFilled(value: i) {
-                print("\(i) is filled")
                 buttonCollection.first(where: {$0.tag == i})?.isEnabled = false
             }
         }
@@ -100,22 +99,23 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     
     //MARK: - Gameplay Methods
     func playerEntered(_ value: Int, atRow row: Int, atCol col: Int) {
-        if game.play(value, row: row, col: col) {
-            GameStore.shared.update(game)
-            renderBoard()
-            if game.numberFilled(value: value) {
-                buttonCollection.first(where: {$0.tag == value})?.isEnabled = false
+        if (pencilMode) {} else {
+            if game.play(value, row: row, col: col) {
+                GameStore.shared.update(game)
+                renderBoard()
+                if game.numberFilled(value: value) {
+                    buttonCollection.first(where: {$0.tag == value})?.isEnabled = false
+                }
+            } else {
+                //indicate cell can't be modified
+                boardView.cell(row: row, column: col).shake()
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
             }
-        } else {
-            //indicate cell can't be modified
-            boardView.cell(row: row, column: col).shake()
-            UINotificationFeedbackGenerator().notificationOccurred(.error) // optional haptic
         }
     }
     
     func boardView(_ boardView: BoardView, didSelectRow row: Int, column: Int) {
         if (selected ?? (9, 9) == (row, column)) {
-            print("double tap")
             selected = nil
         } else {
             selected = (row, column)
@@ -135,10 +135,12 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
                 if let s = selected {
                     if r == s.row && c == s.col {
                         highlight = .selected
-                    } else if value != nil && value == selectedValue {
-                        highlight = .sameNumber
-                    } else if r == s.row || c == s.col || (r / 3 == s.row / 3 && c / 3 == s.col / 3) {
-                        highlight = .related
+                    } else if UserDefaults.standard.bool(forKey: "peers") {
+                        if value != nil && value == selectedValue {
+                            highlight = .sameNumber
+                        } else if r == s.row || c == s.col || (r / 3 == s.row / 3 && c / 3 == s.col / 3) {
+                            highlight = .related
+                        }
                     }
                 }
                 boardView.cell(row: r, column: c).configure(
@@ -169,10 +171,23 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     }
     @IBAction func redoButton(_ sender: UIButton) {
     }
+    
     @IBAction func eraserButton(_ sender: UIButton) {
+        guard let s = selected else { return }
+        if game.board[s.row][s.col] != nil, let removed = game.erase(row: s.row, col: s.col) {
+            GameStore.shared.update(game)
+            // the erased number is no longer fully placed, so re-enable its button
+            buttonCollection.first(where: {$0.tag == removed})?.isEnabled = true
+        } else if game.initial[s.row][s.col] {
+            boardView.cell(row: s.row, column: s.col).shake()
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+        renderBoard()
     }
+    
     @IBAction func pauseButton(_ sender: UIBarButtonItem) {
     }
+    
     @IBAction func pressedReset(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Are you sure you want to restart to the original board layout?", message: "This action cannot be undone", preferredStyle: .alert)
         let reset = UIAlertAction(title: "Restart", style: .destructive) { [unowned self] _ in
@@ -183,5 +198,6 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         alert.addAction(reset)
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
+        UINotificationFeedbackGenerator().notificationOccurred(.warning)
     }
 }

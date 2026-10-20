@@ -16,7 +16,7 @@ final class GameStore {
     private init() { load() }
 
     var activeGames: [SudokuGame] {
-        games.filter { !$0.isSolved }
+        games//.filter { !$0.isSolved }
              .sorted { $0.lastPlayed > $1.lastPlayed }
     }
 

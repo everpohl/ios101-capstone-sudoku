@@ -9,13 +9,14 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     @IBOutlet var themeIcon: UISwitch!
+    @IBOutlet var highlightPeers: UISwitch!
     @IBOutlet var themeButtons: [UIButton]!
     
     
     @IBAction func themeButtonTapped(_ sender: UIButton) {
         let theme = Theme.allCases[sender.tag]
         Theme.current = theme
-        view.window?.tintColor = theme.color   // tab bar updates immediately
+        view.window?.tintColor = theme.color
         
         UserDefaults.standard.set(sender.tag, forKey: "themeIndex")
         for button in themeButtons {
@@ -53,11 +54,14 @@ class SettingsViewController: UITableViewController {
         themeIcon.isOn = UserDefaults.standard.bool(forKey: "themeIcons")
     }
     
+    @IBAction func togglePeers(_ sender: Any) {
+        UserDefaults.standard.set(highlightPeers.isOn,forKey: "peers")
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 1. Deselect the row so it doesn't stay gray
         tableView.deselectRow(at: indexPath, animated: true)
         if (indexPath[1] == 1) {
-            // Tapping the row doesn't flip the switch on its own, so flip it here first
             themeIcon.setOn(!themeIcon.isOn, animated: true)
             switchedThemeIcon(themeIcon)
         }

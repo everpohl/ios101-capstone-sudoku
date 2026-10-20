@@ -32,7 +32,6 @@ final class BoardView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        print("BoardView bounds:", bounds)
         let thin: CGFloat = 1, thick: CGFloat = 3
         let side = min(bounds.width, bounds.height)
         let size = (side - 4 * thick - 6 * thin) / 9
@@ -46,9 +45,6 @@ final class BoardView: UIView {
                     CGRect(x: offset(col), y: offset(row), width: size, height: size)
             }
         }
-        
-            // ...existing frame code...
-        print("Cell 0:", cells[0].frame, "Cell 80:", cells[80].frame)
     }
 
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
