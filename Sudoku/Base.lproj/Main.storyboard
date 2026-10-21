@@ -12,7 +12,7 @@
         <!--High Scores-->
         <scene sceneID="JGU-zH-cyY">
             <objects>
-                <tableViewController id="gpL-fZ-jJz" sceneMemberID="viewController">
+                <tableViewController id="gpL-fZ-jJz" customClass="LeaderboardTableViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="s4u-7D-nL9">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -29,6 +29,9 @@
                                         <segment title="Medium"/>
                                         <segment title="Hard"/>
                                     </segments>
+                                    <connections>
+                                        <action selector="filterDifficulty:" destination="gpL-fZ-jJz" eventType="valueChanged" id="vMV-IW-uHO"/>
+                                    </connections>
                                 </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -38,15 +41,17 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="AdU-Yc-qe8">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="leaderboardCell" id="AdU-Yc-qe8">
                                 <rect key="frame" x="0.0" y="94" width="402" height="51"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AdU-Yc-qe8" id="a1O-E5-UNu">
                                     <rect key="frame" x="0.0" y="0.0" width="402" height="51"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Difficulty) PuzzleFinish Time: X:XX - Mistakes: X" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcb-fr-bII">
-                                            <rect key="frame" x="20" y="15.333333333333334" width="372" height="20.333333333333329"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rcb-fr-bII">
+                                            <rect key="frame" x="20" y="5.3333333333333321" width="237" height="40.666666666666671"/>
+                                            <string key="text">(Difficulty) Puzzle
+Finish Time: X:XX - Mistakes: X</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -127,14 +132,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UVl-ZW-8lW">
-                                <rect key="frame" x="5" y="183" width="382" height="2429.6666666666665"/>
+                                <rect key="frame" x="5" y="183" width="382" height="2489.3333333333335"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="zls-1L-B54">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="2212"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="382" height="2271.6666666666665"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2c-iW-NFe" customClass="BoardView" customModule="Sudoku" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="915" width="382" height="382"/>
+                                                <rect key="frame" x="0.0" y="945" width="382" height="382"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="y2c-iW-NFe" secondAttribute="height" multiplier="1:1" id="asT-NU-yoa"/>
@@ -154,7 +159,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="3bV-ad-Ydw">
-                                        <rect key="frame" x="0.0" y="2222" width="382" height="207.66666666666652"/>
+                                        <rect key="frame" x="0.0" y="2281.6666666666665" width="382" height="207.66666666666652"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jv2-wM-jrt">
                                                 <rect key="frame" x="0.0" y="0.0" width="382" height="68.333333333333329"/>
@@ -310,9 +315,9 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="z3b-P4-STJ">
-                                                <rect key="frame" x="0.0" y="156.66666666666652" width="382" height="51"/>
+                                                <rect key="frame" x="0.0" y="156.66666666666697" width="382" height="51"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-pR-GHA">
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-pR-GHA">
                                                         <rect key="frame" x="0.0" y="0.0" width="152.66666666666666" height="51"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="iCN-pR-GHA" secondAttribute="height" multiplier="3:1" id="Lby-U7-Nv0"/>
@@ -326,7 +331,7 @@
                                                             <action selector="undoButton:" destination="1tA-Zb-8lW" eventType="touchUpInside" id="z5x-6t-dsh"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gA2-Kb-Qe3">
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gA2-Kb-Qe3">
                                                         <rect key="frame" x="165.66666666666666" y="0.0" width="50.666666666666657" height="51"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="gA2-Kb-Qe3" secondAttribute="height" multiplier="1:1" id="FEc-hD-du7"/>
@@ -338,7 +343,7 @@
                                                             <action selector="redoButton:" destination="1tA-Zb-8lW" eventType="touchUpInside" id="cSf-vr-0wL"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfK-K9-wod">
+                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfK-K9-wod">
                                                         <rect key="frame" x="229.33333333333337" y="0.0" width="152.66666666666663" height="51"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="EfK-K9-wod" secondAttribute="height" multiplier="3:1" id="l7m-8z-y1B"/>
