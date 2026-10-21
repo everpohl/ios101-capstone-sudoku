@@ -11,7 +11,10 @@ enum CellHighlight { case none, related, sameNumber, selected }
 
 final class CellView: UIView {
     private let label = UILabel()
+    private let noteView = UIStackView()
+    private let noteLabels: [UILabel] = (0..<9).map { _ in UILabel() }
     private let tintView = UIView()
+    private let noteSpacing:CGFloat = 3
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,6 +26,31 @@ final class CellView: UIView {
             label.centerXAnchor.constraint(equalTo: centerXAnchor),
             label.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+        for noteLabel in noteLabels {
+            noteLabel.textAlignment = .center
+            noteLabel.font = .systemFont(ofSize: 10, weight: .medium)
+            noteLabel.textColor = .secondaryLabel
+        }
+        for row in 0...2 {
+            let rowStack = UIStackView(arrangedSubviews: Array(noteLabels[row * 3 ..< row * 3 + 3]))
+            rowStack.axis = .horizontal
+            rowStack.distribution = .fillEqually
+            rowStack.alignment = .center
+            rowStack.spacing = noteSpacing
+            noteView.addArrangedSubview(rowStack)
+        }
+        noteView.axis = .vertical
+        noteView.distribution = .fillEqually
+//        noteView.alignment = .center
+        noteView.spacing = noteSpacing
+        noteView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(noteView)
+        NSLayoutConstraint.activate([
+            noteView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            noteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+            noteView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            noteView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2)
+        ])
         backgroundColor = .systemBackground
         tintView.frame = bounds
         tintView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -31,8 +59,13 @@ final class CellView: UIView {
     }
     required init?(coder: NSCoder) { fatalError() }
 
-    func configure(value: Int?, isGiven: Bool, highlight: CellHighlight, isConflict: Bool) {
+    func configure(value: Int?, notes: Set<Int>, isGiven: Bool, highlight: CellHighlight, isConflict: Bool) {
         label.text = value.map(String.init) ?? ""
+        label.isHidden = value == nil
+        noteView.isHidden = value != nil
+        for (i, noteLabel) in noteLabels.enumerated() {
+            noteLabel.text = notes.contains(i + 1) ? String(i + 1) : ""
+        }
         label.textColor = isConflict ? UIColor(red: 1, green: 0, blue: 0, alpha: 1) : (isGiven ? .label : Theme.current.color)
         switch highlight {
         case .none:       tintView.backgroundColor = .systemBackground

@@ -25,10 +25,10 @@ struct SudokuGame: Codable, Identifiable {
     let id : UUID
     let solution: [[Int]]
     let initial: [[Bool]]
-    let notes: [[[Int]]]
     var difficulty: Difficulty
     let size: Int
     private(set) var board: [[Int?]]
+    private(set) var notes: [[Set<Int>]]
     private(set) var mistakes = 0
     var lastPlayed: Date
     let timer: GameTimer
@@ -41,7 +41,7 @@ struct SudokuGame: Codable, Identifiable {
         initial = puzzle.map {row in row.map { $0 != nil} }
         self.lastPlayed = Date()
         self.size = size
-        self.notes = []
+        self.notes = Array(repeating: Array(repeating: Set<Int>(), count: 9), count: 9)
         self.timer = GameTimer()
     }
     
@@ -53,7 +53,7 @@ struct SudokuGame: Codable, Identifiable {
         initial = response.puzzle.map {row in row.map { $0 != nil} }
         self.lastPlayed = Date()
         self.size = size
-        self.notes = []
+        self.notes = Array(repeating: Array(repeating: Set<Int>(), count: 9), count: 9)
         self.timer = GameTimer()
     }
     
@@ -62,15 +62,26 @@ struct SudokuGame: Codable, Identifiable {
             return false
         }
         board[row][col] = value
+        notes[row][col] = Set<Int>()
         if (solution[row][col] != value) {
             mistakes += 1
         }
         lastPlayed = Date()
+        if isSolved { timer.pause() }
         return true
     }
     
-    mutating func note(_ value: Int, row: Int, col: Int) {
-        
+    mutating func note(_ value: Int, row: Int, col: Int) -> Bool {
+        if (board[row][col] != nil) {
+            return false
+        }
+        if (notes[row][col].contains(value)) {
+            notes[row][col].remove(value)
+        } else {
+            notes[row][col].insert(value)
+        }
+        lastPlayed = Date()
+        return true
     }
     
     // Clears a player-entered value. Returns the removed value, or nil if the cell can't be modified.
@@ -90,6 +101,7 @@ struct SudokuGame: Codable, Identifiable {
         for r in board.indices {
             for c in board[r].indices where !initial[r][c] {
                 board[r][c] = nil
+                notes[r][c] = Set<Int>()
             }
         }
         timer.reset()
@@ -135,6 +147,17 @@ struct SudokuGame: Codable, Identifiable {
             check((0..<9).map { Position(row: r0 + $0 / 3, col: c0 + $0 % 3) })
         }
         return conflicts
+    }
+    struct Move: Codable {
+        let row: Int, col: Int
+        let oldValue: Int?, newValue: Int?
+        let oldNotes: Set<Int>, newNotes: Set<Int>
+    }
+    
+    mutating func apply( _ move: Move, reversed: Bool = false) {
+        board[move.row][move.col] = reversed ? move.oldValue : move.newValue
+        notes[move.row][move.col] = reversed ? move.oldNotes : move.newNotes
+        lastPlayed = Date()
     }
 }
 

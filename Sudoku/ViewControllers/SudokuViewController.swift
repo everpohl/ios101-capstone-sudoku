@@ -27,6 +27,8 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     private var currentAxis: NSLayoutConstraint.Axis?
     private var pause = false
     private var tickTask: Task<Void, Never>?
+    private let gameUndoManager = UndoManager()
+    override var undoManager: UndoManager? { gameUndoManager }
     
     //MARK: - UI View Methods
     override func viewDidLoad() {
@@ -62,19 +64,23 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         //format navigation bar
         navigationItem.title = "Sudoku"
         navigationItem.style = .editor
-        tickTask = Task { [weak self] in
-            while !Task.isCancelled {
-                self?.updateSubtitle()
-                try? await Task.sleep(for: .seconds(1))
-            }
-        }
         boardView.delegate = self
-        for i in 1...10 {
-            if game.numberFilled(value: i) {
-                buttonCollection.first(where: {$0.tag == i})?.isEnabled = false
-            }
-        }
+        updateNumberButtons()
         renderBoard()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appMovedToBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(appResumedFromBackground),
+                    name: UIApplication.willEnterForegroundNotification,
+                    object: nil
+                )
+        NotificationCenter.default.addObserver(self, selector: #selector(undoManagerDidChange), name: .NSUndoManagerDidUndoChange, object: undoManager)
+        NotificationCenter.default.addObserver(self, selector: #selector(undoManagerDidChange), name: .NSUndoManagerDidRedoChange, object: undoManager)
     }
     
     override func viewWillLayoutSubviews() {
@@ -166,25 +172,26 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         //Ensure that the theme is updated, just in case the user has changed the theme.
         for button in buttonCollection {
             button.configuration?.baseBackgroundColor = Theme.current.color
         }
-        for i in 1...10 {
-            if game.numberFilled(value: i) {
-                buttonCollection.first(where: {$0.tag == i})?.isEnabled = false
-            }
-        }
+        updateNumberButtons()
+        updateUndoRedoButtons()
         renderBoard()
-        if (!pause) {
+        if (!pause && !game.isSolved) {
             game.timer.start()
         }
         tickTask = Task { [weak self] in
             while !Task.isCancelled {
                 self?.updateSubtitle()
                 try? await Task.sleep(for: .seconds(1))
+                guard self != nil else { return }
             }
         }
+        // Enable shake to undo
+        becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -195,20 +202,66 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         GameStore.shared.update(game)
     }
     
+    @objc private func undoManagerDidChange(_ notification: Notification) {
+        updateUndoRedoButtons()
+    }
+
+    @objc func appMovedToBackground() {
+        game.timer.pause()
+        GameStore.shared.update(game)
+    }
+    
+    @objc func appResumedFromBackground() {
+        if (!pause && !game.isSolved) {
+            game.timer.start()
+        }
+    }
+    
+    // Must return true to participate in the responder chain actions
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     //MARK: - Gameplay Methods
     func playerEntered(_ value: Int, atRow row: Int, atCol col: Int) {
-        if (pencilMode) {} else {
-            if game.play(value, row: row, col: col) {
-                GameStore.shared.update(game)
+        if (game.isSolved) {
+            return
+        }
+        if (pencilMode) {
+            let oldNotes = game.notes[row][col]
+            if game.note(value, row: row, col: col) {
+                let move = SudokuGame.Move(row: row, col: col, oldValue: game.board[row][col], newValue: game.board[row][col], oldNotes: oldNotes, newNotes: game.notes[row][col])
+                registerUndo(move, name: "noted \(value)")
                 renderBoard()
-                if game.numberFilled(value: value) {
-                    buttonCollection.first(where: {$0.tag == value})?.isEnabled = false
-                }
+            } else {
+                boardView.cell(row: row, column: col).shake()
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
+            }
+        } else {
+            let oldValue = game.board[row][col]
+            let oldNotes = game.notes[row][col]
+            if game.play(value, row: row, col: col) {
+                let move = SudokuGame.Move(row: row, col: col, oldValue: oldValue, newValue: game.board[row][col], oldNotes: oldNotes, newNotes: game.notes[row][col])
+                registerUndo(move, name: "played \(value)")
+                renderBoard()
+                updateNumberButtons()
             } else {
                 //indicate cell can't be modified
                 boardView.cell(row: row, column: col).shake()
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
             }
+        }
+        if game.isSolved {
+            updateUndoRedoButtons()
+            let alert = UIAlertController(title: "You solved the puzzle!", message: "Time: \(game.timer.elapsedTime.formatted(.time(pattern: .minuteSecond))) - Mistakes: \(game.mistakes)", preferredStyle: .alert)
+            let reset = UIAlertAction(title: "Close Game", style: .default) { [unowned self] _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+            let cancel = UIAlertAction(title: "View Board", style: .cancel)
+            alert.addAction(reset)
+            alert.addAction(cancel)
+            present(alert, animated: true, completion: nil)
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
     }
     
@@ -253,6 +306,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
                 }
                 boardView.cell(row: r, column: c).configure(
                     value: value,
+                    notes: game.notes[r][c],
                     isGiven: game.initial[r][c],
                     highlight: highlight,
                     isConflict: conflicts.contains(Position(row: r, col: c))
@@ -261,40 +315,69 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
     }
     
-    //later: add check that pencil mode isn't turned on, then add process for placing pencil values
     @IBAction func pressedNumberButton(_ sender: UIButton) {
         guard let s = selected else { return }
         playerEntered(sender.tag, atRow: s.row, atCol: s.col)
+        updateUndoRedoButtons()
         renderBoard()
     }
     @IBAction func pencilToggle(_ sender: UIButton) {
-        if (pencilMode) {
+        if (!pencilMode) {
             toggleOn(button: sender)
         } else {
             toggleOff(button: sender)
         }
         pencilMode = !pencilMode
     }
+    
+    private func registerUndo(_ move: SudokuGame.Move, reversed: Bool = false, name: String) {
+        undoManager?.registerUndo(withTarget: self) { targetSelf in
+            // When an undo occurs, this closure runs.
+            // Registering the reverse action here automatically builds the Redo step.
+            targetSelf.registerUndo(move, reversed: !reversed, name: name)
+            targetSelf.game.apply(move, reversed: !reversed)
+            targetSelf.selected = (row: move.row, col: move.col)
+            targetSelf.renderBoard()
+            targetSelf.updateNumberButtons()
+        }
+        undoManager?.setActionName(name)
+    }
+    
     @IBAction func undoButton(_ sender: UIButton) {
+        if undoManager?.canUndo == true {
+            undoManager?.undo()
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
     }
     @IBAction func redoButton(_ sender: UIButton) {
+        if undoManager?.canRedo == true {
+            undoManager?.redo()
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
     }
     
     @IBAction func eraserButton(_ sender: UIButton) {
         guard let s = selected else { return }
         if game.board[s.row][s.col] != nil, let removed = game.erase(row: s.row, col: s.col) {
-            GameStore.shared.update(game)
-            // the erased number is no longer fully placed, so re-enable its button
+            // the erased number is no longer fully placed, so re-enable its button if the button was disabled
             buttonCollection.first(where: {$0.tag == removed})?.isEnabled = true
+            let oldNotes = game.notes[s.row][s.col]
+            let move = SudokuGame.Move(row: s.row, col: s.col, oldValue: removed, newValue: nil, oldNotes: oldNotes, newNotes: oldNotes)
+            registerUndo(move, name: "erased \(removed)")
         } else if game.initial[s.row][s.col] {
             boardView.cell(row: s.row, column: s.col).shake()
             UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
         renderBoard()
+        updateNumberButtons()
+        updateUndoRedoButtons()
     }
     
     @IBOutlet var pauseBar: UIBarButtonItem!
     @IBAction func pauseButton(_ sender: UIBarButtonItem) {
+        guard !game.isSolved else { return }
         if !game.timer.isRunning {
             game.timer.start()
             pauseBar.image = UIImage(systemName: "pause.fill")
@@ -312,11 +395,38 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         let reset = UIAlertAction(title: "Restart", style: .destructive) { [unowned self] _ in
             game.restart()
             renderBoard()
+            if (!pause) { game.timer.start()}
+            undoManager?.removeAllActions()
+            updateUndoRedoButtons()
+            updateNumberButtons()
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(reset)
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
         UINotificationFeedbackGenerator().notificationOccurred(.warning)
+    }
+    
+    func updateUndoRedoButtons() {
+        if game.isSolved {
+            //If the game is solved, there is no reason to undo/redo. Clearing all actions will both prevent any scenario where the user undoes or redoes their win, and will turn off both buttons since canUndo and canRedo will be false if this condition executes
+            undoManager?.removeAllActions()
+        }
+        if undoManager?.canRedo == true {
+            toggleOn(button: redoButton)
+        } else {
+            toggleOff(button: redoButton)
+        }
+        if undoManager?.canUndo == true {
+            toggleOn(button: undoButton)
+        } else {
+            toggleOff(button: undoButton)
+        }
+    }
+    
+    func updateNumberButtons() {
+        for button in buttonCollection {
+            button.isEnabled = !game.numberFilled(value: button.tag)
+        }
     }
 }
