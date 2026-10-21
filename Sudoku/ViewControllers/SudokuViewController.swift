@@ -321,6 +321,78 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         updateUndoRedoButtons()
         renderBoard()
     }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        let digits = (1...9).map { n in
+            UIKeyCommand(title: "Enter \(n)",
+                         action: #selector(handleDigit(_:)),
+                         input: "\(n)")
+        }
+
+        let arrows = [UIKeyCommand.inputUpArrow, UIKeyCommand.inputDownArrow,
+                      UIKeyCommand.inputLeftArrow, UIKeyCommand.inputRightArrow]
+            .map { UIKeyCommand(input: $0, modifierFlags: [], action: #selector(handleArrow(_:))) }
+
+        // Without this, the system may use arrow keys for focus or scrolling first.
+        arrows.forEach { $0.wantsPriorityOverSystemBehavior = true }
+
+        /*
+        let cut = UIKeyCommand(title: "Cut", action: #selector(cutCell),
+                               input: "x", modifierFlags: .command)
+        let copy = UIKeyCommand(title: "Copy", action: #selector(copyCell),
+                                input: "c", modifierFlags: .command)
+        let paste = UIKeyCommand(title: "Paste", action: #selector(pasteCell),
+                                 input: "v", modifierFlags: .command)
+        */
+        return digits + arrows //+ [cut, copy, paste]
+    }
+    
+    @objc func handleDigit(_ sender: UIKeyCommand) {
+        guard let input = sender.input, let n = Int(input), let s = selected else { return }
+//        guard let s = selected else { return }
+        playerEntered(n, atRow: s.row, atCol: s.col)
+        updateUndoRedoButtons()
+        renderBoard()
+    }
+
+    @objc func handleArrow(_ sender: UIKeyCommand) {
+        switch sender.input {
+        case UIKeyCommand.inputUpArrow:
+            guard var s = selected else { return }
+            s.col -= 1
+            selected = s
+        case UIKeyCommand.inputDownArrow:
+            guard var s = selected else { return }
+            s.col += 1
+            selected = s
+        case UIKeyCommand.inputLeftArrow:
+            guard var s = selected else { return }
+            s.row -= 1
+            selected = s
+        case UIKeyCommand.inputRightArrow:
+            guard var s = selected else { return }
+            s.row += 1
+            selected = s
+        default: break
+        }
+    }
+    
+    @objc func undoMove() {
+        if undoManager?.canUndo == true {
+            undoManager?.undo()
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+    }
+    
+    @objc func redoMove() {
+        if undoManager?.canRedo == true {
+            undoManager?.redo()
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+    }
+    
     @IBAction func pencilToggle(_ sender: UIButton) {
         if (!pencilMode) {
             toggleOn(button: sender)
@@ -369,6 +441,10 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         } else if game.initial[s.row][s.col] {
             boardView.cell(row: s.row, column: s.col).shake()
             UINotificationFeedbackGenerator().notificationOccurred(.error)
+        } else if (game.board[s.row][s.col] == nil && !game.notes.isEmpty) {
+            if game.erase(row: s.row, col: s.col) != nil {
+                print("uh erasing a spot with no value but that does have notes should return nil")
+            }
         }
         renderBoard()
         updateNumberButtons()

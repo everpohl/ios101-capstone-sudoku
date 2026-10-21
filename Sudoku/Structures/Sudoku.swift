@@ -62,7 +62,7 @@ struct SudokuGame: Codable, Identifiable {
             return false
         }
         board[row][col] = value
-        notes[row][col] = Set<Int>()
+//        notes[row][col] = Set<Int>()
         if (solution[row][col] != value) {
             mistakes += 1
         }
@@ -90,6 +90,9 @@ struct SudokuGame: Codable, Identifiable {
             return nil
         }
         let removed = board[row][col]
+        if (removed == nil) {
+            notes[row][col] = Set<Int>()
+        }
         board[row][col] = nil
         lastPlayed = Date()
         return removed
