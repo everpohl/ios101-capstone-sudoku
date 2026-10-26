@@ -35,6 +35,7 @@ final class BoardView: UIView {
         let thin: CGFloat = 1, thick: CGFloat = 3
         let side = min(bounds.width, bounds.height)
         let size = (side - 4 * thick - 6 * thin) / 9
+        if size <= 0 { return }
 
         func offset(_ i: Int) -> CGFloat {
             thick + CGFloat(i) * size + CGFloat(i - i / 3) * thin + CGFloat(i / 3) * thick

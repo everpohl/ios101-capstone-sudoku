@@ -132,14 +132,13 @@ Finish Time: X:XX - Mistakes: X</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UVl-ZW-8lW">
-                                <rect key="frame" x="5" y="183" width="382" height="2496.3333333333335"/>
+                                <rect key="frame" x="5" y="183" width="362" height="539"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" id="zls-1L-B54">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="2331.3333333333335"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zls-1L-B54">
+                                        <rect key="frame" x="0.0" y="0.0" width="362" height="362"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2c-iW-NFe" customClass="BoardView" customModule="Sudoku" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="974.66666666666674" width="382" height="382"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="362" height="362"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="y2c-iW-NFe" secondAttribute="height" multiplier="1:1" id="asT-NU-yoa"/>
@@ -159,13 +158,13 @@ Finish Time: X:XX - Mistakes: X</string>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="3bV-ad-Ydw">
-                                        <rect key="frame" x="0.0" y="2341.3333333333335" width="382" height="155"/>
+                                        <rect key="frame" x="0.0" y="372" width="362" height="167"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jv2-wM-jrt">
-                                                <rect key="frame" x="0.0" y="0.0" width="382" height="42.666666666666664"/>
+                                                <rect key="frame" x="27.333333333333343" y="0.0" width="307.33333333333326" height="53.333333333333336"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="egn-F0-qkv">
-                                                        <rect key="frame" x="0.0" y="0.0" width="68.333333333333329" height="42.666666666666664"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="53.666666666666664" height="53.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="egn-F0-qkv" secondAttribute="height" multiplier="1:1" id="aCn-gU-Bvg"/>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="nBm-In-44a"/>
@@ -182,7 +181,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ime-o3-1BW">
-                                                        <rect key="frame" x="78.333333333333343" y="0.0" width="68.333333333333343" height="42.666666666666664"/>
+                                                        <rect key="frame" x="63.666666666666657" y="0.0" width="53.333333333333343" height="53.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Ime-o3-1BW" secondAttribute="height" multiplier="1:1" id="E6v-d0-awI"/>
                                                         </constraints>
@@ -196,7 +195,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-sr-6lg">
-                                                        <rect key="frame" x="156.66666666666666" y="0.0" width="68.666666666666657" height="42.666666666666664"/>
+                                                        <rect key="frame" x="126.99999999999999" y="0.0" width="53.333333333333329" height="53.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Ohg-sr-6lg" secondAttribute="height" multiplier="1:1" id="yb7-2w-lm8"/>
                                                         </constraints>
@@ -210,7 +209,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NIK-fT-6pF">
-                                                        <rect key="frame" x="235.33333333333334" y="0.0" width="68.333333333333343" height="42.666666666666664"/>
+                                                        <rect key="frame" x="190.33333333333331" y="0.0" width="53.333333333333343" height="53.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="NIK-fT-6pF" secondAttribute="height" multiplier="1:1" id="tmG-HS-RUq"/>
                                                         </constraints>
@@ -224,7 +223,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bm2-Wr-PDF">
-                                                        <rect key="frame" x="313.66666666666669" y="0.0" width="68.333333333333314" height="42.666666666666664"/>
+                                                        <rect key="frame" x="253.66666666666666" y="0.0" width="53.666666666666657" height="53.333333333333336"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Bm2-Wr-PDF" secondAttribute="height" multiplier="1:1" id="adQ-hJ-vGz"/>
                                                         </constraints>
@@ -240,10 +239,10 @@ Finish Time: X:XX - Mistakes: X</string>
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cNF-sc-nZU">
-                                                <rect key="frame" x="0.0" y="52.666666666666515" width="382" height="42.666666666666657"/>
+                                                <rect key="frame" x="27.333333333333343" y="63.333333333333371" width="307.33333333333326" height="53.666666666666657"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qFt-ew-fUx">
-                                                        <rect key="frame" x="0.0" y="0.0" width="68.333333333333329" height="42.666666666666664"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="53.666666666666664" height="53.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="qFt-ew-fUx" secondAttribute="height" multiplier="1:1" id="KQs-Z4-k6f"/>
                                                         </constraints>
@@ -257,7 +256,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fpx-bK-lia">
-                                                        <rect key="frame" x="78.333333333333343" y="0.0" width="68.333333333333343" height="42.666666666666664"/>
+                                                        <rect key="frame" x="63.666666666666657" y="0.0" width="53.333333333333343" height="53.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="Fpx-bK-lia" secondAttribute="height" multiplier="1:1" id="aYA-AM-cyG"/>
                                                         </constraints>
@@ -271,7 +270,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z0J-cU-2lI">
-                                                        <rect key="frame" x="156.66666666666666" y="0.0" width="68.666666666666657" height="42.666666666666664"/>
+                                                        <rect key="frame" x="126.99999999999999" y="0.0" width="53.333333333333329" height="53.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="z0J-cU-2lI" secondAttribute="height" multiplier="1:1" id="BK2-zM-hgP"/>
                                                         </constraints>
@@ -285,7 +284,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yri-Gk-NlU">
-                                                        <rect key="frame" x="235.33333333333334" y="0.0" width="68.333333333333343" height="42.666666666666664"/>
+                                                        <rect key="frame" x="190.33333333333331" y="0.0" width="53.333333333333343" height="53.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="yri-Gk-NlU" secondAttribute="height" multiplier="1:1" id="bRw-cp-cnv"/>
                                                         </constraints>
@@ -299,7 +298,7 @@ Finish Time: X:XX - Mistakes: X</string>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tXA-ac-wfI">
-                                                        <rect key="frame" x="313.66666666666669" y="0.0" width="68.333333333333314" height="42.666666666666664"/>
+                                                        <rect key="frame" x="253.66666666666666" y="0.0" width="53.666666666666657" height="53.666666666666664"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="tXA-ac-wfI" secondAttribute="height" multiplier="1:1" id="c5b-Mw-KSj"/>
                                                         </constraints>
@@ -315,10 +314,10 @@ Finish Time: X:XX - Mistakes: X</string>
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="13" translatesAutoresizingMaskIntoConstraints="NO" id="z3b-P4-STJ">
-                                                <rect key="frame" x="0.0" y="105.33333333333304" width="382" height="49.666666666666671"/>
+                                                <rect key="frame" x="27.333333333333343" y="127" width="307.33333333333326" height="40"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-pR-GHA">
-                                                        <rect key="frame" x="0.0" y="0.0" width="184.66666666666666" height="49.666666666666664"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iCN-pR-GHA">
+                                                        <rect key="frame" x="0.0" y="0.0" width="120.66666666666667" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="iCN-pR-GHA" secondAttribute="height" multiplier="3:1" id="Lby-U7-Nv0"/>
                                                         </constraints>
@@ -331,8 +330,8 @@ Finish Time: X:XX - Mistakes: X</string>
                                                             <action selector="undoButton:" destination="1tA-Zb-8lW" eventType="touchUpInside" id="z5x-6t-dsh"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gA2-Kb-Qe3">
-                                                        <rect key="frame" x="197.66666666666666" y="0.0" width="49.666666666666657" height="49.666666666666664"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gA2-Kb-Qe3">
+                                                        <rect key="frame" x="133.66666666666666" y="0.0" width="40" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="gA2-Kb-Qe3" secondAttribute="height" multiplier="1:1" id="FEc-hD-du7"/>
                                                         </constraints>
@@ -343,8 +342,8 @@ Finish Time: X:XX - Mistakes: X</string>
                                                             <action selector="redoButton:" destination="1tA-Zb-8lW" eventType="touchUpInside" id="cSf-vr-0wL"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfK-K9-wod">
-                                                        <rect key="frame" x="260.33333333333331" y="0.0" width="121.66666666666669" height="49.666666666666664"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EfK-K9-wod">
+                                                        <rect key="frame" x="186.66666666666666" y="0.0" width="120.66666666666666" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="EfK-K9-wod" secondAttribute="height" multiplier="3:1" id="l7m-8z-y1B"/>
                                                         </constraints>
@@ -419,7 +418,7 @@ Finish Time: X:XX - Mistakes: X</string>
         <scene sceneID="L5v-tb-B89">
             <objects>
                 <tableViewController title="Settings" id="KIr-pL-h7Y" customClass="SettingsViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="UOe-lb-laq">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="51" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="UOe-lb-laq">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -737,10 +736,10 @@ Finish Time: X:XX - Mistakes: X</string>
             </objects>
             <point key="canvasLocation" x="-421" y="1492"/>
         </scene>
-        <!--Tab Bar View Controller-->
+        <!--Tab Bar Controller-->
         <scene sceneID="3p9-8h-76u">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="W9w-Sz-rPz" customClass="TabBarViewController" customModule="Sudoku" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="W9w-Sz-rPz" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NmR-29-rVZ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>

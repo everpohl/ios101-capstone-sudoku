@@ -45,11 +45,15 @@ final class CellView: UIView {
         noteView.spacing = noteSpacing
         noteView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(noteView)
+        let noteBottom = noteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2)
+        noteBottom.priority = UILayoutPriority(999)
+        let noteTrailing = noteView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2)
+        noteTrailing.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             noteView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            noteView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+            noteBottom,
             noteView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            noteView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2)
+            noteTrailing
         ])
         backgroundColor = .systemBackground
         tintView.frame = bounds
