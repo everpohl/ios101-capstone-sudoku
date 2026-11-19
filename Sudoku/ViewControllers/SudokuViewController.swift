@@ -23,7 +23,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     }
     private var selected: (row: Int, col: Int)?
     private var pencilMode = false
-    //the axis the buttons were last arranged for; nil until the first layout pass
+    //the rotation (landscape/portrait) the buttons were last arranged for
     private var currentAxis: NSLayoutConstraint.Axis?
     private var pause = false
     private var tickTask: Task<Void, Never>?
@@ -83,7 +83,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         //This runs whenever the view's bounds change: rotation, iPhone Duo fold/unfold, split view, or window resizing.
         let available = view.safeAreaLayoutGuide.layoutFrame.size
         let axis: NSLayoutConstraint.Axis = available.width > available.height ? .horizontal : .vertical
-        //only rearrange on change so we don't trigger extra layout passes
+        //only rearrange on rotation
         guard axis != currentAxis else { return }
         currentAxis = axis
         mainStackView.axis = axis
@@ -91,56 +91,6 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         //since the number buttons are capped at a max size in the storyboard
         mainStackView.alignment = axis == .horizontal ? .center : .fill
         arrangeButtons(for: axis)
-    }
-    
-    /// Rebuilds the button rows for the current layout.
-    /// Side by side (.horizontal): a narrow 3-wide grid, so the board gets more width.
-    /// Stacked (.vertical): wide 5-across rows, so the board gets more height.
-    private func arrangeButtons(for axis: NSLayoutConstraint.Axis) {
-        let numbers = buttonCollection.sorted { $0.tag < $1.tag }
-        guard numbers.count == 9 else { return }
-        
-        let rows: [UIStackView]
-        if axis == .horizontal {
-            rows = [
-                makeRow(Array(numbers[0..<3]), equalWidths: true),
-                makeRow(Array(numbers[3..<6]), equalWidths: true),
-                makeRow(Array(numbers[6..<9]), equalWidths: true),
-                makeRow([undoButton, redoButton]),
-                makeRow([eraseButton, pencilButton])
-            ]
-        } else {
-            rows = [
-                makeRow(Array(numbers[0..<5]), equalWidths: true),
-                makeRow(Array(numbers[5..<9]) + [pencilButton], equalWidths: true),
-                makeRow([undoButton, redoButton, eraseButton], spacing: 13)
-            ]
-        }
-        
-        //the buttons have already moved into the new rows, so the old rows are empty.
-        //removing them also drops any width constraints that referenced them
-        for oldRow in buttonsStackView.arrangedSubviews {
-            oldRow.removeFromSuperview()
-        }
-        for row in rows {
-            buttonsStackView.addArrangedSubview(row)
-        }
-        //every row matches the first row's width, so the grid lines up.
-        //button 1 is always in the first row and its size constraints set that width
-        for row in rows.dropFirst() {
-            row.widthAnchor.constraint(equalTo: rows[0].widthAnchor).isActive = true
-        }
-    }
-    
-    /// Makes a horizontal row. Adding a button to the row moves it out of its old row,
-    /// keeping its outlets, actions, and size constraints.
-    private func makeRow(_ buttons: [UIButton], equalWidths: Bool = false, spacing: CGFloat = 10) -> UIStackView {
-        let row = UIStackView(arrangedSubviews: buttons)
-        row.axis = .horizontal
-        row.spacing = spacing
-        //number buttons share the width equally; the undo/redo/erase rows size from each button's aspect ratio
-        row.distribution = equalWidths ? .fillEqually : .fill
-        return row
     }
     
     func toggleOff(button: UIButton) {
@@ -215,12 +165,18 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     func boardView(_ boardView: BoardView, didSelectRow row: Int, column: Int) {
         if (selected ?? (9, 9) == (row, column)) {
             selected = nil
+            //If tapped cell is already selected, deselect it
         } else {
             selected = (row, column)
+            //If a cell isn't selected or is not the currently
+            //selected cell, select the tapped cell
         }
         renderBoard()
     }
     
+    //MARK: -Rendering Methods
+    
+    //Updates the top subtitle, which displays difficulty and the timer. if the timer is disabled, the timer will not render.
     private func updateSubtitle() {
         let difficulty = game.difficulty.rawValue.capitalized
         let time = game.timer.elapsedTime.formatted(.time(pattern: .minuteSecond))
@@ -232,7 +188,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
     }
 
     private func renderBoard() {
-        //update each cell based on the game.board param, including marking invlaid cells with red
+        //update each cell based on the game.board param, including marking invlaid cells with red. This method is at the conclusion of every method which involves modifying the board.
         let conflicts = game.conflictingCells()
         let selectedValue = selected.flatMap { game.board[$0.row][$0.col] }
 
@@ -261,12 +217,16 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
     }
     
-    //later: add check that pencil mode isn't turned on, then add process for placing pencil values
+    //MARK: - Button Methods
+    
+    //called whenever 1-9 buttons are pressed
     @IBAction func pressedNumberButton(_ sender: UIButton) {
         guard let s = selected else { return }
         playerEntered(sender.tag, atRow: s.row, atCol: s.col)
         renderBoard()
     }
+    
+    //called whenever pencil button is selected. updates the button appearance and pencilMode
     @IBAction func pencilToggle(_ sender: UIButton) {
         if (pencilMode) {
             toggleOn(button: sender)
@@ -275,16 +235,19 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         }
         pencilMode = !pencilMode
     }
+    
+    /* Undo/Redo is handled somewhere else. (i forgot where)?
     @IBAction func undoButton(_ sender: UIButton) {
     }
     @IBAction func redoButton(_ sender: UIButton) {
     }
+    */
     
     @IBAction func eraserButton(_ sender: UIButton) {
         guard let s = selected else { return }
         if game.board[s.row][s.col] != nil, let removed = game.erase(row: s.row, col: s.col) {
             GameStore.shared.update(game)
-            // the erased number is no longer fully placed, so re-enable its button
+            // the erased number may no longer be fully placed, so re-enable its button in case it was deleted.
             buttonCollection.first(where: {$0.tag == removed})?.isEnabled = true
         } else if game.initial[s.row][s.col] {
             boardView.cell(row: s.row, column: s.col).shake()
@@ -293,6 +256,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         renderBoard()
     }
     
+    //Pauses game if pause button is pressed. Currently only pauses clock,
     @IBOutlet var pauseBar: UIBarButtonItem!
     @IBAction func pauseButton(_ sender: UIBarButtonItem) {
         if !game.timer.isRunning {
@@ -307,6 +271,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         updateSubtitle()
     }
     
+    //Resets the board. only handles the dialogue box here, the reset is processed in the game structure
     @IBAction func pressedReset(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Are you sure you want to restart to the original board layout?", message: "This action cannot be undone", preferredStyle: .alert)
         let reset = UIAlertAction(title: "Restart", style: .destructive) { [unowned self] _ in
@@ -318,5 +283,57 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
         UINotificationFeedbackGenerator().notificationOccurred(.warning)
+    }
+    
+    //MARK: - Horizontal/Vertical layout handling
+    
+    /// Rebuilds the button rows for the current layout.
+    /// Side by side (.horizontal): a narrow 3-wide grid, so the board gets more width.
+    /// Stacked (.vertical): wide 5-across rows, so the board gets more height.
+    private func arrangeButtons(for axis: NSLayoutConstraint.Axis) {
+        let numbers = buttonCollection.sorted { $0.tag < $1.tag }
+        guard numbers.count == 9 else { return }
+        
+        let rows: [UIStackView]
+        if axis == .horizontal {
+            rows = [
+                makeRow(Array(numbers[0..<3]), equalWidths: true),
+                makeRow(Array(numbers[3..<6]), equalWidths: true),
+                makeRow(Array(numbers[6..<9]), equalWidths: true),
+                makeRow([undoButton, redoButton]),
+                makeRow([eraseButton, pencilButton])
+            ]
+        } else {
+            rows = [
+                makeRow(Array(numbers[0..<5]), equalWidths: true),
+                makeRow(Array(numbers[5..<9]) + [pencilButton], equalWidths: true),
+                makeRow([undoButton, redoButton, eraseButton], spacing: 13)
+            ]
+        }
+        
+        //the buttons have already moved into the new rows, so the old rows are empty.
+        //removing them also drops any width constraints that referenced them
+        for oldRow in buttonsStackView.arrangedSubviews {
+            oldRow.removeFromSuperview()
+        }
+        for row in rows {
+            buttonsStackView.addArrangedSubview(row)
+        }
+        //every row matches the first row's width, so the grid lines up.
+        //button 1 is always in the first row and its size constraints set that width
+        for row in rows.dropFirst() {
+            row.widthAnchor.constraint(equalTo: rows[0].widthAnchor).isActive = true
+        }
+    }
+    
+    /// Makes a horizontal row. Adding a button to the row moves it out of its old row,
+    /// keeping its outlets, actions, and size constraints.
+    private func makeRow(_ buttons: [UIButton], equalWidths: Bool = false, spacing: CGFloat = 10) -> UIStackView {
+        let row = UIStackView(arrangedSubviews: buttons)
+        row.axis = .horizontal
+        row.spacing = spacing
+        //number buttons share the width equally; the undo/redo/erase rows size from each button's aspect ratio
+        row.distribution = equalWidths ? .fillEqually : .fill
+        return row
     }
 }

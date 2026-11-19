@@ -76,7 +76,7 @@ class SudokuTableViewController: UITableViewController {
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
-    //MARK: Creating boards methods
+    //MARK: -Creating boards methods
     private func startNewGame(_ difficulty: Difficulty, _ size: Int) {
         guard !isCreatingGame else { return }
         isCreatingGame = true
