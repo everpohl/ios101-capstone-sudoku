@@ -12,8 +12,9 @@ class SettingsViewController: UITableViewController {
     @IBOutlet var highlightPeers: UISwitch!
     @IBOutlet var themeButtons: [UIButton]!
     @IBOutlet var puzzleSource: UISegmentedControl!
-    
     @IBOutlet var timerSwitch: UISwitch!
+    
+    
     @IBAction func themeButtonTapped(_ sender: UIButton) {
         let theme = Theme.allCases[sender.tag]
         Theme.current = theme
@@ -83,5 +84,6 @@ class SettingsViewController: UITableViewController {
             timerSwitch.setOn(!timerSwitch.isOn, animated: true)
             toggleTimer(timerSwitch)
         }
+        //add similar mistap checks for any missing settings
     }
 }
