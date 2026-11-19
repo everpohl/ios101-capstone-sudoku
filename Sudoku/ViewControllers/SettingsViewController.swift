@@ -54,6 +54,9 @@ class SettingsViewController: UITableViewController {
         themeButtons.first { $0.tag == themeIndex }?.isSelected = true
         
         themeIcon.isOn = UserDefaults.standard.bool(forKey: "themeIcons")
+        puzzleSource.selectedSegmentIndex = UserDefaults.standard.bool(forKey: "api") ? 0 : 1
+        highlightPeers.isOn = UserDefaults.standard.bool(forKey: "peers")
+        timerSwitch.isOn = UserDefaults.standard.bool(forKey: "timer")
     }
     
     @IBAction func togglePeers(_ sender: UISwitch) {

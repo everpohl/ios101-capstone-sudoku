@@ -425,7 +425,6 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
         undoManager?.setActionName(name)
     }
 
-    /* Undo/Redo is handled somewhere else. (i forgot where)?
     @IBAction func undoButton(_ sender: UIButton) {
         if undoManager?.canUndo == true {
             undoManager?.undo()
@@ -433,6 +432,7 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
     }
+    
     @IBAction func redoButton(_ sender: UIButton) {
         if undoManager?.canRedo == true {
             undoManager?.redo()
@@ -440,7 +440,6 @@ class SudokuViewController: UIViewController, BoardViewDelegate {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
     }
-    */
     
     @IBAction func eraserButton(_ sender: UIButton) {
         guard let s = selected else { return }

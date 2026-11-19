@@ -11,46 +11,46 @@ platform, etc.), but it must fulfill specific technical requirements. Upon compl
 present your project to the class, explaining your design decisions, implementation
 process, and providing a live demonstration of the app’s functionality.
 Objectives
-- [ ] Apply Swift fundamentals (classes, structs, enums) to create a fully functional app.
-- [ ] Utilize URLSession to connect to an API and retrieve data.
-- [ ] Implement navigation between views and view controllers, including passing data as required.
-- [ ] Persist data locally using UserDefaults.
-- [ ] Leverage UIKit to incorporate a diverse range of views and view controllers.
-- [ ] Absolutely NO SWIFTUI
+- [x] Apply Swift fundamentals (classes, structs, enums) to create a fully functional app.
+- [x] Utilize URLSession to connect to an API and retrieve data.
+- [x] Implement navigation between views and view controllers, including passing data as required.
+- [x] Persist data locally using UserDefaults.
+- [x] Leverage UIKit to incorporate a diverse range of views and view controllers.
+- [x] Absolutely NO SWIFTUI
 - [ ] You can use async/await only after you have satisfied all other requirements
 
 Project Requirements
 Technical Requirements
 1. Swift Basics
-    - [ ] Usage of enum
-    - [ ] Usage of closure (i.e. API Integration)
-        - [ ] Escaping closure
-    - [ ] Show usage of protocols
-        - [ ] Beyond usage of TableViews protocols
-    - [ ] Show general understanding of fundamentals
-        - [ ] Proper usage of functions
-        - [ ] class/struct
-        - [ ] Optionals
-        - [ ] Typecasting
+    - [x] Usage of enum
+    - [x] Usage of closure (i.e. API Integration)
+        - [x] Escaping closure
+    - [x] Show usage of protocols
+        - [x] Beyond usage of TableViews protocols
+    - [x] Show general understanding of fundamentals
+        - [x] Proper usage of functions
+        - [x] class/struct
+        - [x] Optionals
+        - [x] Typecasting
 2. UIKit
-    - [ ] Build the UI with Interface Builder (storyboards).
-    - [ ] Use Autolayout and appropriate constraints to verify views are positioned appropriately
-    - [ ] Include common UIKit components (e.g., UILabel, UIButton).
-    - [ ] Usage of a TableView
-    - [ ] Usage of a NavigationViewController with proper navigation
-    - [ ] Usage of a TabbarViewController
+    - [x] Build the UI with Interface Builder (storyboards).
+    - [x] Use Autolayout and appropriate constraints to verify views are positioned appropriately
+    - [x] Include common UIKit components (e.g., UILabel, UIButton).
+    - [x] Usage of a TableView
+    - [x] Usage of a NavigationViewController with proper navigation
+    - [x] Usage of a TabbarViewController
 3. API Integration (URLSession)
-    - [ ] Connect to a public API
-    - [ ] Fetch data (e.g., JSON) and parse it into usable Swift structs or classes.
-        - [ ] Codable
-    - [ ] Display the fetched data in the app’s UI.
-    - [ ] Not all data is required to be retrieved from an API, it’s okay to mock some of your data
+    - [x] Connect to a public API
+    - [x] Fetch data (e.g., JSON) and parse it into usable Swift structs or classes.
+        - [x] Codable
+    - [x] Display the fetched data in the app’s UI.
+    - [x] Not all data is required to be retrieved from an API, it’s okay to mock some of your data
 4. Navigation and Data Passing
-    - [ ] Use a UINavigationController/UITabbarController or another navigation mechanism (e.g., modal presentation) to move between at least two distinct views/view controllers.
-    - [ ] Pass data between view controllers (e.g., user input or API results).
+    - [x] Use a UINavigationController/UITabbarController or another navigation mechanism (e.g., modal presentation) to move between at least two distinct views/view controllers.
+    - [x] Pass data between view controllers (e.g., user input or API results).
 5. Data Persistence
-    - [ ] Store custom data type using Codable
-    - [ ] Retrieve and display this data when the app launches or when appropriate.
+    - [x] Store custom data type using Codable
+    - [x] Retrieve and display this data when the app launches or when appropriate.
 6. Presentation
     - [ ] Prepare a 4 minute max presentation for the class.
     - [ ] App walkthrough, Code Structure, Things you would improve on
